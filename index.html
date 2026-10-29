@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Archivos y POO en C# · Taller de Programación 1</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%236d28d9'/%3E%3Cpath d='M20 14h16l10 10v26H20z' fill='%23fff'/%3E%3Cpath d='M36 14v10h10' fill='%23ddd6fe'/%3E%3C/svg%3E">
 <style>
   :root{
     --bg:#f6f7fb;
@@ -2306,8 +2307,9 @@ function crearArmado(a){
       const id = puestos[idx];
       slot.classList.remove("ok", "no", "over");
       slot.classList.toggle("filled", !!id);
+      const sangria = filasModelo[idx].texto.match(/^\s*/)[0];
       slot.innerHTML = id
-        ? escaparHtml(porId[id].texto)
+        ? escaparHtml(sangria + porId[id].texto.replace(/^\s+/, ""))
         : '<span class="slot-num">' + (esOrden ? "línea " + (idx + 1) : "hueco") + '</span>';
     });
   }
