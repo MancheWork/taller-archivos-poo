@@ -1,0 +1,2873 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Archivos y POO en C# · Taller de Programación 1</title>
+<style>
+  :root{
+    --bg:#f6f7fb;
+    --card:#ffffff;
+    --ink:#111827;
+    --muted:#5b6472;
+    --line:#e5e7eb;
+    --brand:#6d28d9;
+    --brand-dark:#5b21b6;
+    --brand-soft:#f5f3ff;
+    --ok:#047857;
+    --ok-soft:#ecfdf5;
+    --ok-line:#a7f3d0;
+    --bad:#b91c1c;
+    --bad-soft:#fef2f2;
+    --bad-line:#fecaca;
+    --code-bg:#0b1220;
+    --radius:16px;
+    --shadow:0 1px 2px rgba(15,23,42,.04), 0 8px 24px rgba(15,23,42,.06);
+    --mono:ui-monospace,"Cascadia Mono","Segoe UI Mono",Consolas,"Courier New",monospace;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{line-height:1.25;margin:0}
+  p{margin:0 0 14px}
+  a{color:var(--brand)}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+  :focus-visible{outline:3px solid #a78bfa;outline-offset:2px}
+  .hidden{display:none !important}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#3b0764 0%,#5b21b6 45%,#4338ca 100%);color:#f5f3ff;padding:64px 0 72px}
+  .hero::before,.hero::after{content:"";position:absolute;border-radius:50%;filter:blur(10px);pointer-events:none}
+  .hero::before{width:520px;height:520px;right:-140px;top:-220px;background:radial-gradient(circle,rgba(167,139,250,.55),transparent 65%)}
+  .hero::after{width:420px;height:420px;left:-120px;bottom:-240px;background:radial-gradient(circle,rgba(56,189,248,.28),transparent 65%)}
+  .hero .wrap{position:relative}
+  .hero .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:#ddd6fe;border:1px solid rgba(221,214,254,.35);padding:6px 12px;border-radius:999px;margin-bottom:18px}
+  .hero h1{font-size:clamp(30px,4.4vw,46px);letter-spacing:-.02em;max-width:820px}
+  .hero p.lead{margin-top:14px;max-width:720px;color:#e9e5ff;font-size:17.5px}
+  .badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+  .badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);padding:7px 13px;border-radius:999px;font-size:13.5px}
+  .hero .note{margin-top:22px;font-size:13px;color:#c7c0f5;max-width:680px}
+
+  /* ---------- NAV ---------- */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;gap:18px;padding:10px 20px;max-width:1120px;margin:0 auto}
+  .nav-links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1}
+  .nav-links::-webkit-scrollbar{display:none}
+  .nav-links a{white-space:nowrap;text-decoration:none;color:var(--muted);font-size:14px;font-weight:600;padding:8px 12px;border-radius:999px}
+  .nav-links a:hover{background:#f3f4f6;color:var(--ink)}
+  .nav-links a.active{background:var(--brand-soft);color:var(--brand-dark)}
+  .nav-progress{display:flex;align-items:center;gap:10px;min-width:190px}
+  .bar{width:96px;height:7px;border-radius:999px;background:#e9e7f5;overflow:hidden}
+  .bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#7c3aed,#4f46e5);border-radius:999px;transition:width .35s ease}
+  .nav-progress small{font-size:12.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+
+  /* ---------- SECTIONS ---------- */
+  main{padding-bottom:20px}
+  section{padding:58px 0 8px;scroll-margin-top:78px}
+  .kicker{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);font-weight:700;margin-bottom:8px}
+  h2{font-size:clamp(24px,3vw,32px);letter-spacing:-.015em;margin-bottom:10px}
+  .section-lead{color:var(--muted);max-width:780px;font-size:16.5px;margin-bottom:26px}
+
+  /* ---------- THEORY ---------- */
+  .lesson{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px 28px;box-shadow:var(--shadow);margin-bottom:18px}
+  .lesson h3{font-size:20px;display:flex;align-items:center;gap:12px;margin-bottom:12px;letter-spacing:-.01em}
+  .lnum{flex:0 0 auto;width:34px;height:34px;border-radius:10px;background:var(--brand-soft);color:var(--brand-dark);display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;letter-spacing:.02em}
+  .lesson p{color:#2b3340}
+  .lesson strong{color:var(--ink)}
+  .lesson ul{color:#2b3340;padding-left:22px;margin:0 0 14px}
+  .lesson li{margin-bottom:8px}
+  .callout{background:linear-gradient(120deg,#faf5ff,#eef2ff);border:1px solid #e0d9fb;border-radius:12px;padding:14px 16px;margin:14px 0;font-size:15px;color:#312e6b}
+  .callout strong{color:#312e6b}
+  .qa{background:var(--brand-soft);border:1px solid #ede9fe;border-radius:12px;padding:12px 16px;margin:12px 0}
+  .qa summary{cursor:pointer;font-weight:700;color:var(--brand-dark);font-size:15px;list-style:none;display:flex;gap:10px;align-items:flex-start}
+  .qa summary::-webkit-details-marker{display:none}
+  .qa summary::before{content:"?";flex:0 0 auto;width:20px;height:20px;border-radius:50%;background:#ddd6fe;color:#4c1d95;font-size:12.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;margin-top:2px}
+  .qa[open] summary{margin-bottom:8px}
+  .qa p{font-size:15px;color:#3f3a5e;margin:0 0 8px}
+  .qa p:last-child{margin-bottom:0}
+  .qa code{background:#ede9fe;color:#4c1d95}
+  details.hint{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:12px 0}
+  details.hint summary{cursor:pointer;font-weight:600;color:#334155;font-size:14.5px}
+  details.hint p{font-size:14.5px;margin:8px 0 0;color:#475569}
+
+  code{font-family:var(--mono);font-size:.9em;background:#f1f5f9;padding:2px 6px;border-radius:6px;color:#0f172a}
+
+  pre.code{background:var(--code-bg);color:#e2e8f0;border-radius:14px;padding:16px 18px;overflow:auto;font-family:var(--mono);font-size:13.5px;line-height:1.6;margin:14px 0;border:1px solid #1e293b;tab-size:4}
+  .c-kw{color:#c084fc}
+  .c-str{color:#86efac}
+  .c-com{color:#8fa3bf;font-style:italic}
+  .c-num{color:#fbbf24}
+  .c-type{color:#7dd3fc}
+
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th{background:#f5f3ff;text-align:left;font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:#4c1d95;padding:10px 12px;border-bottom:1px solid #e9e5ff}
+  td{padding:10px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top;color:#2b3340}
+  tr:last-child td{border-bottom:none}
+  td code{white-space:nowrap}
+  .table-wrap{overflow-x:auto}
+
+  .checklist-box{background:#fff;border:1px solid var(--line);border-left:4px solid var(--brand);border-radius:12px;padding:18px 22px;margin-top:8px;box-shadow:var(--shadow)}
+  .checklist-box h4{font-size:15.5px;margin-bottom:10px;color:var(--brand-dark)}
+  .checklist-box ol{margin:0;padding-left:20px;color:#2b3340;font-size:15px}
+  .checklist-box li{margin-bottom:6px}
+
+  /* ---------- FLASHCARDS ---------- */
+  #flashcards .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+  .fc-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .fc-counter{font-size:13.5px;color:var(--muted);font-weight:600}
+  .fc{perspective:1400px;height:352px;cursor:pointer;user-select:none;margin:0 auto;max-width:760px}
+  .fc-inner{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+  .fc.flipped .fc-inner{transform:rotateY(180deg)}
+  .fc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;padding:26px 30px;display:flex;flex-direction:column;justify-content:center;overflow:auto}
+  .fc-front{background:linear-gradient(140deg,#1e1b4b,#312e81 60%,#4338ca);color:#eef2ff;box-shadow:0 18px 40px rgba(49,46,129,.28)}
+  .fc-back{background:#fff;border:1px solid var(--line);transform:rotateY(180deg);box-shadow:0 18px 40px rgba(15,23,42,.12)}
+  .fc-front .chip{background:rgba(255,255,255,.14);color:#e0e7ff;border-color:rgba(255,255,255,.2)}
+  .fc-q{font-size:clamp(19px,2.3vw,24px);font-weight:700;line-height:1.4;margin:14px 0 10px;letter-spacing:-.01em}
+  .fc-hintline{position:absolute;left:30px;bottom:20px;font-size:12.5px;color:#c7d2fe;opacity:.85}
+  .fc-back .ans-label{font-size:11.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:700;margin-bottom:10px}
+  .fc-a{font-size:16.5px;color:#1f2937;line-height:1.6}
+  .fc-a code{background:#f1f5f9}
+  .fc-controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .chip{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.04em;padding:4px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand-dark);border:1px solid #ede9fe;width:max-content}
+
+  /* ---------- QUIZ ---------- */
+  #quiz .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px 28px;box-shadow:var(--shadow);max-width:860px}
+  .quiz-head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+  .quiz-step{font-size:13px;font-weight:700;color:var(--muted)}
+  .quiz-q{font-size:19px;font-weight:700;letter-spacing:-.01em;margin:10px 0 18px;line-height:1.45}
+  .opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:9px;cursor:pointer;font:inherit;color:#1f2937;transition:border-color .15s,background .15s,transform .1s}
+  .opt:hover{border-color:#c4b5fd;background:#fcfaff}
+  .opt:active{transform:scale(.995)}
+  .opt .letter{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#f1f5f9;color:#475569;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .opt.sel{border-color:var(--brand);background:var(--brand-soft)}
+  .opt.sel .letter{background:var(--brand);color:#fff}
+  .opt.correct{border-color:#34d399;background:var(--ok-soft)}
+  .opt.correct .letter{background:#10b981;color:#fff}
+  .opt.wrong{border-color:#f87171;background:var(--bad-soft)}
+  .opt.wrong .letter{background:#ef4444;color:#fff}
+  .opt:disabled{cursor:default}
+  .quiz-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .explain{margin-top:14px;border-radius:12px;padding:13px 16px;font-size:15px;display:none}
+  .explain.show{display:block}
+  .explain.ok{background:var(--ok-soft);border:1px solid var(--ok-line);color:#065f46}
+  .explain.bad{background:var(--bad-soft);border:1px solid var(--bad-line);color:#7f1d1d}
+  .explain strong{display:block;margin-bottom:4px}
+  .result{text-align:center;padding:10px 0 4px}
+  .result .score{font-size:56px;font-weight:800;letter-spacing:-.03em;color:var(--brand-dark);line-height:1.1}
+  .result .score small{font-size:20px;color:var(--muted);font-weight:700}
+  .result p{color:var(--muted);max-width:560px;margin:10px auto 0}
+  .review{margin-top:22px;text-align:left}
+  .review-item{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:#fff}
+  .review-item p{margin:0;font-size:14.5px}
+  .review-item .rq{font-weight:700;margin-bottom:6px}
+  .review-item .ra{color:var(--ok);font-weight:600}
+  .review-item .rw{color:var(--bad);font-weight:600}
+  .review-item .why{color:var(--muted);margin-top:6px;font-size:14px}
+
+  /* ---------- TASKS ---------- */
+  .legend{background:#fffbeb;border:1px solid #fde68a;color:#78350f;border-radius:12px;padding:12px 16px;font-size:14.5px;margin-bottom:20px}
+  .task{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;box-shadow:var(--shadow);margin-bottom:20px}
+  .task-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+  .task-head h3{font-size:19.5px;letter-spacing:-.01em;flex:1;min-width:200px}
+  .status{font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;background:#f1f5f9;color:#475569}
+  .status.done{background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok-line)}
+  .prompt{color:#2b3340;margin-bottom:8px}
+  .task-body{display:grid;grid-template-columns:1fr 1.12fr;gap:24px;margin-top:14px;align-items:start}
+  .task-left,.task-right{min-width:0}
+  .label{font-size:11.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700;margin-bottom:6px}
+  .orig{margin-bottom:14px}
+  .orig pre.code{overflow:visible;white-space:pre-wrap;overflow-wrap:anywhere;margin:0;font-size:13px}
+  textarea{width:100%;min-height:340px;background:var(--code-bg);color:#e2e8f0;border:1px solid #1e293b;border-radius:14px;padding:14px 16px;font-family:var(--mono);font-size:13.5px;line-height:1.6;resize:vertical;tab-size:4;display:block}
+  textarea:focus{outline:2px solid #a78bfa;outline-offset:1px}
+  .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+  .btn{display:inline-flex;align-items:center;gap:7px;border-radius:10px;padding:9px 15px;font-family:inherit;font-size:14.5px;font-weight:700;border:1px solid transparent;cursor:pointer;transition:background .15s,border-color .15s,transform .1s;background:#fff;color:var(--ink)}
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .btn.primary:hover{background:var(--brand-dark)}
+  .btn.ghost{border-color:var(--line);color:#374151}
+  .btn.ghost:hover{border-color:#c4b5fd;background:#fcfaff}
+  .feedback{margin-top:12px;border-radius:12px;padding:12px 14px;font-size:14.5px;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:var(--ok-soft);border:1px solid var(--ok-line);color:#065f46}
+  .feedback.bad{background:var(--bad-soft);border:1px solid var(--bad-line);color:#7f1d1d}
+  .checklist{list-style:none;padding:0;margin:6px 0 0}
+  .checklist li{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed #eef0f4;font-size:14.5px;color:#475569}
+  .checklist li:last-child{border-bottom:none}
+  .checklist .mark{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:#f1f5f9;color:#94a3b8;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .checklist li.ok{color:#065f46}
+  .checklist li.ok .mark{background:#d1fae5;color:#047857}
+  .checklist li.no{color:#7f1d1d}
+  .checklist li.no .mark{background:#fee2e2;color:#b91c1c}
+  .checklist small{display:block;color:#94a3b8;font-size:13px;margin-top:2px;font-weight:500}
+  .solution{margin-top:18px;border-top:1px dashed var(--line);padding-top:16px}
+  .notes{font-size:14px;color:#475569;padding-left:20px;margin:8px 0 0}
+  .notes li{margin-bottom:6px}
+
+  /* ---------- ARMAR / ARRASTRAR ---------- */
+  .armado{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;box-shadow:var(--shadow);margin-bottom:20px}
+  .armado-body{display:grid;grid-template-columns:1.35fr 1fr;gap:22px;margin-top:14px;align-items:start}
+  .armado-col{min-width:0}
+  .codigo-armado{background:var(--code-bg);border:1px solid #1e293b;border-radius:14px;padding:14px 0;font-family:var(--mono);font-size:13.5px;line-height:1.6;overflow:auto;max-height:640px}
+  .fila{padding:0 16px;white-space:pre-wrap;overflow-wrap:anywhere;color:#e2e8f0;min-height:22px}
+  .fila.vacia{color:#475569}
+  .slot{display:block;margin:2px 16px;min-height:28px;border:1px dashed #334155;border-radius:8px;padding:2px 10px;background:rgba(148,163,184,.07);color:#64748b;font-family:var(--mono);font-size:12.5px;white-space:pre-wrap;overflow-wrap:anywhere;cursor:pointer;transition:border-color .15s,background .15s}
+  .slot:hover{border-color:#7c3aed;background:rgba(124,58,237,.12)}
+  .slot .slot-num{color:#64748b;font-size:11.5px}
+  .slot.over{border-color:#a78bfa;border-style:solid;background:rgba(167,139,250,.18)}
+  .slot.filled{border-style:solid;border-color:#4c1d95;background:#171338;color:#e2e8f0;font-size:13.5px;padding:3px 10px}
+  .slot.ok{border-color:#10b981;background:rgba(16,185,129,.14);color:#d1fae5}
+  .slot.no{border-color:#f87171;background:rgba(248,113,113,.12);color:#fecaca}
+  .banco{display:flex;flex-direction:column;gap:8px;min-height:70px;padding:10px;border:1px dashed #d8d3f0;border-radius:12px;background:#fbfaff;max-height:640px;overflow:auto}
+  .banco.over{background:var(--brand-soft);border-color:#a78bfa}
+  .banco .vacio{color:var(--muted);font-size:13px;text-align:center;padding:16px 6px}
+  .bloque{font-family:var(--mono);font-size:12.8px;line-height:1.5;text-align:left;white-space:pre-wrap;overflow-wrap:anywhere;background:#fff;border:1px solid #ddd6fe;border-radius:9px;padding:8px 11px;cursor:grab;color:#1f2937;box-shadow:0 1px 2px rgba(15,23,42,.05);user-select:none;transition:border-color .15s,background .15s,box-shadow .15s}
+  .bloque:hover{border-color:#a78bfa;background:#fcfaff}
+  .bloque:active{cursor:grabbing}
+  .bloque.sel{border-color:var(--brand);background:var(--brand-soft);box-shadow:0 0 0 2px #ddd6fe}
+  .bloque.arrastrando{opacity:.45}
+  .banco-tip{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.5}
+  .armado .actions{margin-top:14px}
+
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--line);margin-top:50px;padding:26px 0 48px;color:var(--muted);font-size:13.5px}
+  .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+  .foot .btn{padding:7px 12px;font-size:13px}
+
+  .quiz-block{margin-bottom:38px}
+  .quiz-block h3{font-size:18.5px;letter-spacing:-.01em;margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .quiz-block .quiz-sub{color:var(--muted);font-size:14.5px;margin-bottom:14px}
+  .quiz-badge{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;background:#eef2ff;color:#4338ca;border:1px solid #e0e7ff}
+
+  @media (max-width:900px){
+    .task-body{grid-template-columns:1fr}
+    .armado-body{grid-template-columns:1fr}
+    .fc{height:390px}
+  }
+  @media (max-width:640px){
+    .hero{padding:46px 0 54px}
+    section{padding:44px 0 6px}
+    .lesson,.task,.armado,#quiz .panel,#flashcards .panel{padding:20px 18px}
+    .nav-progress{min-width:0}
+    .bar{width:64px}
+    .fc{height:420px}
+    .fc-face{padding:22px}
+    .foot{flex-direction:column;align-items:flex-start}
+    .codigo-armado{max-height:460px}
+    .banco{max-height:340px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    .fc-inner{transition:none}
+    .bar span{transition:none}
+  }
+  @media print{
+    .nav,.hero{position:static}
+    .task-body{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Taller de Programación 1 · C#</span>
+    <h1>Archivos y POO: aprende a escribir el código del profe, línea por línea</h1>
+    <p class="lead">La unidad completa explicada desde cero: cómo se guarda información en un archivo, cómo se diseña el formato de un registro, cómo se valida lo que escribe el usuario y cómo se convierte todo eso en clases y objetos.</p>
+    <div class="badges">
+      <span class="badge">12 lecciones con preguntas</span>
+      <span class="badge">22 flashcards</span>
+      <span class="badge">24 preguntas de quiz</span>
+      <span class="badge">5 retos escritos</span>
+      <span class="badge">10 retos de arrastre</span>
+      <span class="badge">3 errores por cazar</span>
+    </div>
+    <p class="note">Los retos se comprueban en el navegador: no se ejecuta C#, se verifican las reglas clave de tu código y se muestra la solución comentada. Nada se instala y nada se envía a internet.</p>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Secciones">
+  <div class="nav-inner">
+    <div class="nav-links" id="navLinks">
+      <a href="#teoria" class="active">Teoría</a>
+      <a href="#flashcards">Flashcards</a>
+      <a href="#quiz">Quiz</a>
+      <a href="#ejercicios">Escribe el código</a>
+      <a href="#armar">Arrastra el código</a>
+      <a href="#errores">Caza el error</a>
+    </div>
+    <div class="nav-progress">
+      <div class="bar"><span id="barFill"></span></div>
+      <small id="doneLabel">0 / 18 retos</small>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ==================== TEORÍA ==================== -->
+<section id="teoria">
+  <div class="kicker">01 · Teoría</div>
+  <h2>Lo que hay que entender antes de escribir una línea</h2>
+  <p class="section-lead">Todo el material del ramo —los cuatro proyectos de archivos, la junta de vecinos, el registro de ventas, el sistema de estudiantes y el préstamo de equipos— se apoya en las mismas ideas. Aquí están explicadas en el orden en que se necesitan, con las preguntas que suelen aparecer en el camino.</p>
+
+  <article class="lesson">
+    <h3><span class="lnum">00</span>La unidad entera en cuatro líneas</h3>
+    <p>Antes de los detalles, mira el resumen. Si entiendes estas cuatro operaciones, entiendes la unidad. Todo lo demás son menús, validaciones y adornos alrededor de esto:</p>
+    <pre class="code" data-src="mental"></pre>
+    <p>Las cuatro líneas son un viaje de ida y vuelta: el objeto se convierte en texto, el texto se guarda, el texto se lee, el objeto se reconstruye. Cada programa del material es ese viaje con otro nombre de clase.</p>
+  </article>
+
+  <article class="lesson">
+    <h3><span class="lnum">01</span>El problema que resuelve un archivo</h3>
+    <p>Cuando un programa guarda algo, normalmente lo hace en variables, y las variables viven en la memoria RAM. Al cerrar el programa, esa memoria se libera y la información desaparece. Un <strong>archivo</strong> es un cuaderno en el disco: sobrevive al cierre del programa y al reinicio del computador.</p>
+    <p>La consecuencia más importante: <strong>un archivo no guarda objetos, guarda caracteres</strong>. No existe forma de meter un <code>Estudiante</code> dentro de un <code>.txt</code>. Lo que se guarda es su representación en texto; al leer, tú reconstruyes el objeto. Ese ida y vuelta se llama <strong>serializar</strong> (objeto → texto) y <strong>deserializar</strong> (texto → objeto).</p>
+    <details class="qa">
+      <summary>¿Por qué el curso usa texto y no un formato binario?</summary>
+      <p>Porque puedes abrir el archivo con el Bloc de notas y ver exactamente lo que escribió tu programa. Cuando algo falla, poder mirar el archivo es la herramienta de depuración más directa que existe. Los formatos binarios son más eficientes, pero opacos mientras aprendes.</p>
+    </details>
+    <details class="qa">
+      <summary>¿El archivo "recuerda" qué tipo de dato era cada campo?</summary>
+      <p>No. Todo lo que sale de un archivo vuelve como <code>string</code>. Si guardaste un número, al leerlo tienes texto y debes convertirlo tú con <code>int.Parse</code>, <code>double.Parse</code> o <code>TryParse</code>. Esa es la razón de la mitad de los errores de la unidad.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Qué pasa si el programa se cierra justo cuando está escribiendo?</summary>
+      <p>El archivo podría quedar incompleto o truncado. Por eso los sistemas serios escriben primero en un archivo temporal y luego lo renombran. Para el nivel de este ramo basta con saber que una escritura no es una operación "mágica": es una operación de disco que puede fallar.</p>
+    </details>
+  </article>
+
+  <article class="lesson">
+    <h3><span class="lnum">02</span>Las seis herramientas que necesitas</h3>
+    <p>Todo se hace con <code>System.IO</code>. Sin la línea <code>using System.IO;</code> los nombres <code>File</code>, <code>Directory</code> y <code>Path</code> no existen para tu programa.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Necesito…</th><th>Método</th><th>Qué hace exactamente</th></tr></thead>
+        <tbody>
+          <tr><td>Asegurar que la carpeta existe</td><td><code>Directory.CreateDirectory(ruta)</code></td><td>La crea si falta. Si ya existe, no hace nada y no falla.</td></tr>
+          <tr><td>Preguntar si el archivo existe</td><td><code>File.Exists(ruta)</code></td><td>Devuelve <code>true</code> o <code>false</code>.</td></tr>
+          <tr><td>Escribir desde cero</td><td><code>File.WriteAllText(ruta, texto)</code></td><td>Crea el archivo y <strong>borra todo lo anterior</strong>.</td></tr>
+          <tr><td>Agregar al final</td><td><code>File.AppendAllText(ruta, texto)</code></td><td>Añade al final. Si el archivo no existe, lo crea.</td></tr>
+          <tr><td>Leer todo de una vez</td><td><code>File.ReadAllText(ruta)</code></td><td>Devuelve un solo <code>string</code> con todo el contenido.</td></tr>
+          <tr><td>Leer por líneas</td><td><code>File.ReadAllLines(ruta)</code></td><td>Devuelve <code>string[]</code>: una posición por línea, <strong>sin</strong> los saltos de línea.</td></tr>
+          <tr><td>Unir carpeta y archivo</td><td><code>Path.Combine(carpeta, "x.txt")</code></td><td>Une las partes con el separador correcto.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <details class="qa">
+      <summary>¿Por qué <code>Path.Combine</code> y no concatenar con <code>+</code>?</summary>
+      <p>Porque concatenar depende de un detalle invisible: que la carpeta termine en barra. <code>"C:\Base_datos" + "datos.txt"</code> produce <code>C:\Base_datodatos.txt</code>, que es otro archivo distinto. <code>Path.Combine</code> pone la barra por ti, siempre. En el material se ve el caso: un proyecto concatena <code>ruta + "datos.txt"</code> y solo funciona porque la cadena termina en <code>\</code>.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Cuándo uso <code>ReadAllText</code> y cuándo <code>ReadAllLines</code>?</summary>
+      <p>Piensa en cómo vas a procesar el contenido. Si el archivo es un bloque (un párrafo, un JSON pequeño, un texto que solo muestras), usa <code>ReadAllText</code>. Si el archivo es una lista de registros, usa <code>ReadAllLines</code>: te entrega filas y puedes recorrerlas con <code>for</code> o <code>foreach</code>.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Qué diferencia hay entre una ruta relativa y una absoluta?</summary>
+      <p>Una ruta absoluta parte desde la raíz (<code>C:\...</code>) y no depende de nada. Una relativa (<code>"ventas.txt"</code>) se resuelve desde la carpeta en la que se está ejecutando el programa, que no siempre es la carpeta donde está tu código. Si no sabes dónde quedó el archivo, imprime la ruta con <code>Console.WriteLine(archivo)</code>: te ahorra media hora de dudas.</p>
+    </details>
+  </article>
+
+  <article class="lesson">
+    <h3><span class="lnum">03</span>El encendido estándar de cualquier programa con archivos</h3>
+    <p>Estas líneas van al principio de todo programa del material. Son el "encendido": dejan el terreno listo para trabajar.</p>
+    <pre class="code" data-src="encendido"></pre>
+    <details class="qa">
+      <summary>¿Por qué crear el archivo vacío si <code>AppendAllText</code> lo crea solo?</summary>
+      <p>Porque <code>AppendAllText</code> crea el archivo, pero <code>ReadAllLines</code> y <code>ReadAllText</code> <strong>no</strong>: si el archivo no existe, lanzan <code>FileNotFoundException</code>. Al crearlo vacío desde el inicio, tu programa puede leer desde el primer arranque sin tener que preguntar "¿y si no existe?" en cada método.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Por qué <code>CreateDirectory</code> si <code>WriteAllText</code> "crea el archivo"?</summary>
+      <p>Porque crea el archivo, pero no la carpeta que lo contiene. Si <code>Documentos\Base_Datos</code> no existe, el programa se cae con <code>DirectoryNotFoundException</code>. Es exactamente el error que aparece al ejecutar el proyecto de creación sin haber creado la carpeta a mano.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Y si la carpeta y el archivo ya existen?</summary>
+      <p>No pasa nada: <code>CreateDirectory</code> es idempotente y <code>File.Exists</code> evita sobrescribir. Esas dos líneas se pueden ejecutar mil veces sin daño. A eso se le llama código idempotente, y es una buena propiedad: el arranque no destruye lo que ya había.</p>
+    </details>
+  </article>
+
+  <article class="lesson">
+    <h3><span class="lnum">04</span><code>WriteAllText</code> vs <code>AppendAllText</code>: el error número uno</h3>
+    <p>Estos dos métodos parecen intercambiables y no lo son. Mira qué pasa al registrar dos ventas con <code>WriteAllText</code>:</p>
+    <pre class="code" data-src="append"></pre>
+    <p>La segunda escritura reemplazó el archivo completo. La primera venta desapareció. Con <code>AppendAllText</code>, en cambio:</p>
+    <pre class="code" data-src="appendOk"></pre>
+    <details class="qa">
+      <summary>¿Cuándo sí debo usar <code>WriteAllText</code>?</summary>
+      <p>Para dos casos: inicializar el archivo en <code>""</code> cuando no existe, y cuando de verdad quieres reemplazar todo el contenido (por ejemplo, guardar un resumen calculado del día). Fuera de eso, en un sistema de registros siempre es <code>AppendAllText</code>.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Cómo borro un registro si el archivo es texto?</summary>
+      <p>No se borra en el lugar. Se lee todo, se reconstruye el contenido sin ese registro y se reescribe el archivo completo con <code>WriteAllText</code>. Es la única forma con texto plano, y es la razón por la que las bases de datos existen:</p>
+      <pre class="code" data-src="borrar"></pre>
+    </details>
+  </article>
+
+  <article class="lesson">
+    <h3><span class="lnum">05</span>El formato del registro: la decisión que define todo</h3>
+    <p>Guardar una lista de cosas obliga a decidir dónde termina un registro y dónde empieza el siguiente. El material muestra dos formas, y una es claramente mejor.</p>
+    <p><strong>Forma A — un bloque de líneas por registro</strong> (la de la junta de vecinos): cada vecino ocupa cinco líneas (Nombre, RUN, Edad, Dirección, Correo) más una línea en blanco. Para buscar, encuentras la línea <code>RUN: 12345678-9</code> y lees las líneas vecinas con <code>i - 1</code>, <code>i + 1</code>, <code>i + 2</code>, <code>i + 3</code>. Funciona, pero depende de que el formato nunca cambie y de que ningún registro quede al final del archivo (ahí <code>i + 3</code> se sale del arreglo y lanza <code>IndexOutOfRangeException</code>).</p>
+    <p><strong>Forma B — una línea por registro, con separador</strong> (la del registro de ventas):</p>
+    <pre class="code" data-src="split"></pre>
+    <p>Cada línea es un registro completo. Leer se vuelve trivial: recorres líneas y cortas cada una. Agregar un campo nuevo al final no rompe nada de lo anterior. Es la forma que debes usar por defecto.</p>
+    <p>El registro de ventas, además, hace el corte <strong>sin</strong> <code>Split</code>, para practicar índices. Entenderlo te muestra qué hace <code>Split</code> por dentro:</p>
+    <pre class="code" data-src="sub"></pre>
+    <p>La cuenta <code>separador2 - separador1 - 1</code> se lee así: "empiezo justo después del primer punto y coma, y avanzo la cantidad de caracteres que hay hasta el segundo".</p>
+    <details class="qa">
+      <summary>¿Por qué comparar un campo y no la línea completa al buscar?</summary>
+      <p>Porque la línea contiene todos los campos. Si buscas <code>"Ana"</code> en <code>"Ana;Cuaderno;4500"</code>, la comparación por igualdad falla, aunque Ana exista. Primero cortas con <code>Split</code> y después comparas <code>datos[0]</code>. Es el error que tiene la búsqueda cuando se copia el patrón de la junta de vecinos a un archivo con separadores.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Qué pasa si un dato contiene el separador?</summary>
+      <p>Se rompe el formato: un nombre con <code>;</code> produce un campo extra y todos los índices siguientes quedan corridos. Los formatos reales resuelven esto escapando el carácter o encerrando el campo entre comillas. Para el ramo, basta con elegir un separador que no aparezca en los datos y validarlo al ingresar.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Cómo evito los errores de índices al leer?</summary>
+      <p>Verifica el largo antes de usar posiciones: <code>if (datos.Length != 3) continue;</code>. Una línea incompleta (por una edición manual, por ejemplo) no debe hacer caer todo el programa. Esta validación es la versión de archivos de "no confíes en la entrada".</p>
+    </details>
+  </article>
+
+  <article class="lesson">
+    <h3><span class="lnum">06</span>La receta de siete pasos para cualquier programa de la unidad</h3>
+    <p>Todos los ejercicios son el mismo programa con otro disfraz. Si sigues estos pasos en orden, no te pierdes:</p>
+    <ol>
+      <li><strong>Decide el formato de una línea.</strong> Ejemplo: <code>vendedor;producto;monto</code>. Escríbelo como comentario antes de programar; es tu contrato.</li>
+      <li><strong>Enciende el archivo</strong>: <code>Path.Combine</code>, <code>CreateDirectory</code>, crear vacío si no existe.</li>
+      <li><strong>Registra</strong>: pide los datos, valida los numéricos, arma la línea con <code>+</code> y guárdala con <code>AppendAllText</code> terminando en <code>\n</code>.</li>
+      <li><strong>Pregunta si continúa</strong>: <code>do { ... } while (respuesta.ToUpper() == "S");</code></li>
+      <li><strong>Arma el menú</strong>: <code>while</code> + <code>switch</code> hasta la opción de salir.</li>
+      <li><strong>Lee y recorre</strong>: <code>ReadAllLines</code> → <code>foreach</code> → <code>Split</code>.</li>
+      <li><strong>Calcula o busca</strong>: los acumuladores se declaran <strong>antes</strong> del bucle y se actualizan dentro.</li>
+    </ol>
+    <p class="callout"><strong>Regla de oro:</strong> el archivo siempre se escribe igual (una línea, un registro) y se lee igual (líneas → campos → objeto). Cambian los nombres, no la estructura. Si tu programa se siente distinto a los demás, probablemente estás inventando un formato nuevo sin necesidad.</p>
+  </article>
+
+  <article class="lesson">
+    <h3><span class="lnum">07</span>Menús y validación de entrada</h3>
+    <p>Un menú es un bucle que se repite hasta que el usuario decide salir. El registro repetido es otro bucle, pero con otra condición.</p>
+    <pre class="code" data-src="otra"></pre>
+    <p>La validación del monto mezcla dos condiciones en una línea: se repite mientras <em>no</em> se pueda convertir <strong>o</strong> mientras el número no sea válido:</p>
+    <pre class="code" data-src="validar"></pre>
+    <pre class="code" data-src="menu"></pre>
+    <details class="qa">
+      <summary>¿Por qué el menú usa <code>while</code> y el registro usa <code>do-while</code>?</summary>
+      <p>Porque el registro debe ocurrir al menos una vez (el usuario vino a registrar algo), mientras que el menú podría no ejecutarse nunca si el usuario ya quiere salir. <code>do-while</code> ejecuta primero y pregunta después; <code>while</code> pregunta primero.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Por qué se pone <code>opcion = 0</code> cuando <code>TryParse</code> falla?</summary>
+      <p>Porque si la conversión falla, <code>opcion</code> conserva su valor anterior. Si en la vuelta anterior valía 4 (salir) y ahora el usuario escribe una letra, el menú saldría sin querer. Poner 0 garantiza que un error de tipeo no se confunda con una opción válida.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Por qué <code>Parse</code> a veces y <code>TryParse</code> otras?</summary>
+      <p><code>Parse</code> lanza una excepción si el texto no es un número, y una excepción no controlada termina el programa. <code>TryParse</code> devuelve <code>false</code> y te deja decidir qué hacer. Regla práctica: si el dato lo escribe una persona, <code>TryParse</code>; si el dato viene de una fuente que controlas y ya validaste, <code>Parse</code>.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Por qué <code>respuesta.ToUpper() == "S"</code>?</summary>
+      <p>Para aceptar tanto <code>s</code> como <code>S</code> sin escribir dos comparaciones. <code>ToUpper</code> convierte el texto a mayúsculas y después se compara con una sola forma. Olvidarlo produce el clásico "escribí s y no siguió".</p>
+    </details>
+  </article>
+
+  <article class="lesson">
+    <h3><span class="lnum">08</span>POO: molde, objeto y constructor</h3>
+    <p>La clase es el molde; el objeto es cada cosa hecha con ese molde; <code>new</code> es el acto de crear. Una clase agrupa <strong>atributos</strong> (lo que el objeto sabe) y <strong>métodos</strong> (lo que el objeto sabe hacer).</p>
+    <pre class="code" data-src="poo"></pre>
+    <p>Un objeto no se usa solo: normalmente hay muchos. Para eso está el <strong>arreglo de objetos</strong>, el patrón que más se repite en el ramo:</p>
+    <pre class="code" data-src="array"></pre>
+    <details class="qa">
+      <summary>¿Qué garantiza el constructor?</summary>
+      <p>Que el objeto nace completo. Sin constructor, podrías crear un estudiante y dejar el nombre sin asignar; con constructor, quien crea el objeto está obligado a entregar todos los datos. Un objeto a medio llenar es una fuente de errores silenciosos.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Qué significa <code>this.Nombre = nombre;</code>?</summary>
+      <p>A la izquierda, <code>this.Nombre</code> es el atributo del objeto; a la derecha, <code>nombre</code> es el parámetro que llegó al constructor. <code>this</code> desambigua cuando ambos se llaman igual. Si el parámetro tuviera otro nombre (por ejemplo <code>nuevoNombre</code>), no haría falta.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Por qué <code>CalcularPromedio</code> no recibe parámetros?</summary>
+      <p>Porque usa los atributos del propio objeto. Esa es la diferencia entre un método y una función suelta: el método pertenece a los datos. Si mañana cambia la fórmula, se cambia en un solo lugar y todos los estudiantes la usan.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Después de <code>new Estudiante[5]</code> hay cinco estudiantes?</summary>
+      <p>No. Hay cinco casillas vacías, todas en <code>null</code>. El arreglo está creado, pero los objetos no. Cada uno nace con <code>new Estudiante(...)</code> dentro del <code>for</code>. Si olvidas ese <code>new</code>, al recorrer el arreglo aparece <code>NullReferenceException</code>.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Arreglo o <code>List&lt;T&gt;</code>?</summary>
+      <p>El arreglo tiene tamaño fijo y sirve cuando la cantidad se conoce al inicio, que es lo que piden los enunciados ("indique la cantidad de estudiantes"). <code>List&lt;T&gt;</code> crece sola y sería mejor si la cantidad no se conoce. Para el ramo, arreglo; en el mundo real, casi siempre lista.</p>
+    </details>
+  </article>
+
+  <article class="lesson">
+    <h3><span class="lnum">09</span>Cómo diseñar clases desde un enunciado</h3>
+    <p>El ejercicio de préstamo de equipos no pide código: pide <em>diseño</em>. La técnica es simple:</p>
+    <ul>
+      <li>Los <strong>sustantivos</strong> importantes son clases: <em>equipo</em>, <em>préstamo</em>.</li>
+      <li>Los <strong>datos</strong> que el enunciado pide de cada uno son atributos: código, tipo, marca, disponible / equipo, persona, días.</li>
+      <li>Los <strong>verbos</strong> que el enunciado menciona son métodos: prestar, mostrar.</li>
+      <li>Las <strong>reglas</strong> ("si no está disponible, no se presta") van dentro del método del objeto.</li>
+    </ul>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Clase</th><th>Atributos</th><th>Métodos</th></tr></thead>
+        <tbody>
+          <tr><td><code>Equipo</code></td><td>Codigo, Tipo, Marca, Disponible (nace en <code>true</code>)</td><td><code>Prestar()</code>, <code>Mostrar()</code></td></tr>
+          <tr><td><code>Prestamo</code></td><td>CodigoEquipo, Persona, Dias</td><td><code>Mostrar()</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <pre class="code" data-src="prestar"></pre>
+    <details class="qa">
+      <summary>¿Por qué la regla va dentro de <code>Prestar</code> y no en el <code>Main</code>?</summary>
+      <p>Porque el <code>Main</code> es la interfaz: pide datos y muestra mensajes. Si la regla estuviera allí, cualquier otro lugar del programa podría marcar un equipo como prestado sin pasar por la validación. Al ponerla en el método, el único camino para cambiar el estado es el correcto. Eso es encapsulamiento, aunque no uses <code>private</code>.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Por qué <code>Prestar</code> devuelve <code>bool</code> en vez de escribir el mensaje?</summary>
+      <p>Porque un método no debería saber si el programa usa consola, ventana o página web. Devuelve el resultado ("se pudo / no se pudo") y quien llama decide cómo informarlo. Separar lógica de presentación hace el código reutilizable.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Dónde se guarda quién tiene el equipo?</summary>
+      <p>En un registro de préstamo, no en el equipo. El equipo sabe <em>si</em> está disponible; el préstamo sabe <em>quién</em> lo tiene y <em>por cuántos días</em>. Mezclar ambas cosas en una sola clase es el error de diseño típico: terminarías con un equipo que "recuerda" a todas las personas que lo pidieron alguna vez.</p>
+    </details>
+  </article>
+
+  <article class="lesson">
+    <h3><span class="lnum">10</span>La plantilla maestra: archivo + POO juntos</h3>
+    <p>Este es el programa que deberías poder escribir de memoria al final de la unidad. Guarda objetos en un archivo y los reconstruye al leer. Estúdialo más que los del material: el método <code>Convertir</code> es el puente entre las dos mitades del ramo.</p>
+    <pre class="code" data-src="maestro"></pre>
+    <details class="qa">
+      <summary>¿Por qué reconstruir el objeto en vez de trabajar con los <code>string[]</code>?</summary>
+      <p>Porque así puedes usar los métodos del objeto (<code>CalcularPromedio</code>, <code>Mostrar</code>) y no repites índices por todo el programa. Además, si cambia el orden de los campos, corriges un solo método (<code>Convertir</code>) y no veinte lugares.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Qué pasa si una línea del archivo está corrupta?</summary>
+      <p>Si tiene menos campos de los esperados, <code>datos[2]</code> lanza <code>IndexOutOfRangeException</code>; si el monto tiene letras, <code>Parse</code> lanza <code>FormatException</code>. La defensa es validar antes de usar:</p>
+      <pre class="code" data-src="corrupta"></pre>
+    </details>
+    <details class="qa">
+      <summary>¿Cómo agrego un campo nuevo sin romper los archivos viejos?</summary>
+      <p>Agregándolo al final de la línea. Las líneas antiguas tendrán menos campos, así que la lectura debe tolerarlo (<code>datos.Length</code> menor) y asumir un valor por defecto. Eso se llama migración de datos, y es exactamente el problema que resuelven las bases de datos con esquemas versionados.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Por qué el menú está en <code>Main</code> y no en una clase?</summary>
+      <p>Porque el menú es el punto de entrada, no parte del modelo. <code>Alumno</code> representa datos del mundo real; <code>Program</code> representa la aplicación. Mezclarlos haría que la clase <code>Alumno</code> dependiera de la consola, y ya no podrías reutilizarla en otro tipo de programa.</p>
+    </details>
+  </article>
+
+  <article class="lesson">
+    <h3><span class="lnum">11</span>Errores típicos y cómo leerlos</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Excepción</th><th>Cuándo aparece</th><th>Cómo se corrige</th></tr></thead>
+        <tbody>
+          <tr><td><code>DirectoryNotFoundException</code></td><td>Escribes en una carpeta que no existe</td><td><code>Directory.CreateDirectory</code> antes de escribir</td></tr>
+          <tr><td><code>FileNotFoundException</code></td><td>Lees un archivo que no existe</td><td>Crear vacío al inicio o comprobar <code>File.Exists</code></td></tr>
+          <tr><td><code>FormatException</code></td><td><code>Parse</code> recibe letras, vacío o coma decimal inesperada</td><td><code>TryParse</code> y volver a pedir el dato</td></tr>
+          <tr><td><code>IndexOutOfRangeException</code></td><td>Usas <code>datos[3]</code> con 3 campos, o <code>i+3</code> al final del arreglo</td><td>Validar <code>datos.Length</code>; no usar formatos por bloques</td></tr>
+          <tr><td><code>NullReferenceException</code></td><td>Recorres el arreglo de objetos antes de crearlos</td><td>El <code>new</code> de cada objeto va dentro del <code>for</code></td></tr>
+          <tr><td><code>UnauthorizedAccessException</code></td><td>El archivo está abierto en otro programa o la ruta es protegida</td><td>Cerrar el archivo; usar una carpeta propia</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <details class="qa">
+      <summary>¿Cómo se lee un mensaje de excepción sin entrar en pánico?</summary>
+      <p>En orden: (1) el <strong>tipo</strong> —te dice qué familia de problema es—; (2) el <strong>mensaje</strong> y la ruta que menciona; (3) la <strong>línea</strong> donde ocurrió, en la parte de abajo del texto; (4) la <strong>línea de tu código</strong> en la pila de llamadas, que es la única que tú puedes cambiar. El resto son tripas de .NET.</p>
+    </details>
+    <details class="qa">
+      <summary>¿Por qué el mensaje dice "línea 15" si mi archivo tiene 20?</summary>
+      <p>Porque la numeración se refiere al archivo compilado con la información de depuración, que corresponde a tu <code>Program.cs</code>. Si el número no calza, recompila: a veces el ejecutable quedó desactualizado respecto del código que estás mirando.</p>
+    </details>
+  </article>
+
+  <div class="checklist-box">
+    <h4>Antes de escribir cualquier programa de la unidad, respóndete esto</h4>
+    <ol>
+      <li>¿Cuál es el formato exacto de una línea?</li>
+      <li>¿Ese formato sobrevive si un dato contiene el separador?</li>
+      <li>¿Dónde vive el archivo y quién crea la carpeta?</li>
+      <li>¿Estoy agregando (append) o reemplazando (write)?</li>
+      <li>¿Qué pasa si el usuario escribe una letra donde va un número?</li>
+      <li>¿Cómo reconstruyo el objeto al leer y qué hago si la línea viene incompleta?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ==================== FLASHCARDS ==================== -->
+<section id="flashcards">
+  <div class="kicker">02 · Flashcards</div>
+  <h2>Memoriza lo que no se deduce</h2>
+  <p class="section-lead">Haz clic en la tarjeta para girarla. Usa las flechas del teclado o los botones. Las tarjetas vistas se guardan en tu navegador.</p>
+
+  <div class="panel">
+    <div class="fc-top">
+      <span class="fc-counter" id="fcCounter">1 / 22</span>
+      <span class="fc-counter" id="fcSeen">Vistas: 0 / 22</span>
+    </div>
+
+    <div class="fc" id="fcCard" tabindex="0" role="button" aria-label="Tarjeta: haz clic para girar">
+      <div class="fc-inner">
+        <div class="fc-face fc-front">
+          <span class="chip" id="fcCat">Archivos</span>
+          <div class="fc-q" id="fcQ"></div>
+          <span class="fc-hintline">Clic para girar</span>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="ans-label">Respuesta</div>
+          <div class="fc-a" id="fcA"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-controls">
+      <button class="btn ghost" id="fcPrev" type="button">← Anterior</button>
+      <button class="btn ghost" id="fcFlip" type="button">Girar</button>
+      <button class="btn ghost" id="fcNext" type="button">Siguiente →</button>
+      <button class="btn primary" id="fcShuffle" type="button">Mezclar</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== QUIZ ==================== -->
+<section id="quiz">
+  <div class="kicker">03 · Quiz</div>
+  <h2>Comprueba si entendiste</h2>
+  <p class="section-lead">Dos rondas, una pregunta a la vez, con explicación inmediata. La primera cubre archivos y formato de registros; la segunda, POO, validación y errores típicos. El mejor resultado de cada ronda se guarda en tu navegador.</p>
+
+  <div class="quiz-block" id="quiz1"></div>
+  <div class="quiz-block" id="quiz2"></div>
+</section>
+
+<!-- ==================== EJERCICIOS ==================== -->
+<section id="ejercicios">
+  <div class="kicker">04 · Escribe el código</div>
+  <h2>Los cinco programas, desde el arranque hasta POO</h2>
+  <p class="section-lead">Escribe tu solución en el editor y pulsa Comprobar. Recibirás una lista de verificaciones: cada una revisa un punto clave del código. Si pasas todas, la lógica está completa. La solución comentada está a un clic.</p>
+  <div class="legend"><strong>Cómo funciona la comprobación:</strong> no se ejecuta C# en el navegador. Se analiza tu código con reglas (métodos usados, formato, orden de las instrucciones, estructura de la clase). Es una guía de estudio, no un compilador: si tu código compila y pasa todo, vas bien. Para ejecutarlo de verdad, llévalo a Visual Studio.</div>
+  <div id="tasks-build"></div>
+</section>
+
+<!-- ==================== ARRASTRA ==================== -->
+<section id="armar">
+  <div class="kicker">05 · Arrastra el código</div>
+  <h2>Arma el programa y rellena los huecos</h2>
+  <p class="section-lead">Aquí no escribes: arrastras. En los cuatro primeros retos el programa está desarmado y debes ordenar cada línea en su lugar. En los seis siguientes falta una parte del código y hay bloques de más: elige el correcto y descarta los distractores. Si prefieres no arrastrar, toca un bloque y luego el hueco; toca un bloque colocado para devolverlo.</p>
+  <div class="legend"><strong>Cómo se comprueba:</strong> cada bloque tiene un lugar correcto. Al pulsar Verificar se marca bloque por bloque (✓ o ✗) y se explica la idea. Un bloque mal puesto no se corrige solo: debes moverlo. La solución completa está oculta a un clic.</div>
+  <div id="tasks-armar"></div>
+</section>
+
+<!-- ==================== ERRORES ==================== -->
+<section id="errores">
+  <div class="kicker">06 · Caza el error</div>
+  <h2>Tres programas que casi funcionan</h2>
+  <p class="section-lead">Cada tarjeta trae código con un error real de la unidad. Léelo, encuentra la causa, corrígelo en el editor y pulsa Comprobar. No hay consola: la verificación te dice si el error desapareció de verdad y si mantuviste lo que ya estaba bien.</p>
+  <div id="tasks-fix"></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>Guía de estudio de <strong>Taller de Programación 1</strong> · Archivos con <code>System.IO</code> y POO en C#.</div>
+    <button class="btn ghost" id="resetProgress" type="button">Reiniciar progreso</button>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   DATOS: fragmentos de código
+   ============================================================ */
+const SNIPPETS = {
+  mental: String.raw`File.AppendAllText(archivo, linea + "\n");   // objeto -> texto -> disco
+string[] lineas = File.ReadAllLines(archivo);  // disco -> texto
+string[] datos = linea.Split(';');             // texto -> campos
+Estudiante e = new Estudiante(datos[0], datos[1], datos[2]); // campos -> objeto`,
+
+  encendido: String.raw`string carpeta = "Base_Datos";
+string archivo = Path.Combine(carpeta, "datos.txt");
+
+Directory.CreateDirectory(carpeta);      // primero la carpeta
+if (!File.Exists(archivo))
+{
+    File.WriteAllText(archivo, "");      // nace vacío, no inexistente
+}`,
+
+  append: String.raw`// 1a venta
+File.WriteAllText(archivo, "Ana;Cuaderno;4500\n");
+
+// 2a venta
+File.WriteAllText(archivo, "Luis;Mochila;23000\n");
+
+// Al abrir ventas.txt solo queda:
+// Luis;Mochila;23000`,
+
+  appendOk: String.raw`File.AppendAllText(archivo, "Ana;Cuaderno;4500\n");
+File.AppendAllText(archivo, "Luis;Mochila;23000\n");
+
+// ventas.txt
+// Ana;Cuaderno;4500
+// Luis;Mochila;23000`,
+
+  borrar: String.raw`string[] lineas = File.ReadAllLines(archivo);
+string nuevo = "";
+
+foreach (string l in lineas)
+{
+    if (!l.StartsWith(runBorrar + ";"))   // conserva todo menos ese registro
+    {
+        nuevo += l + "\n";
+    }
+}
+
+File.WriteAllText(archivo, nuevo);`,
+
+  split: String.raw`string linea = "Ana;Cuaderno;4500";
+string[] datos = linea.Split(';');
+
+// datos[0] = "Ana"
+// datos[1] = "Cuaderno"
+// datos[2] = "4500"    <- sigue siendo texto`,
+
+  sub: String.raw`// linea = "Ana;Cuaderno;4500"
+int separador1 = linea.IndexOf(';');                  // 3
+int separador2 = linea.IndexOf(';', separador1 + 1);  // 12
+
+datos[0] = linea.Substring(0, separador1);             // "Ana"
+datos[1] = linea.Substring(separador1 + 1, separador2 - separador1 - 1);
+datos[2] = linea.Substring(separador2 + 1);            // "4500"`,
+
+  otra: String.raw`string respuesta;
+do
+{
+    RegistrarVenta();
+    Console.Write("¿Otra venta? (S/N): ");
+    respuesta = Console.ReadLine();
+} while (respuesta.ToUpper() == "S");`,
+
+  validar: String.raw`double monto;
+Console.Write("Monto: ");
+while (!double.TryParse(Console.ReadLine(), out monto) || monto <= 0)
+{
+    Console.Write("Monto inválido. Ingrese nuevamente: ");
+}`,
+
+  menu: String.raw`int opcion = 0;
+while (opcion != 4)
+{
+    Console.WriteLine("1. Listar  2. Resumen  3. Buscar  4. Salir");
+    if (!int.TryParse(Console.ReadLine(), out opcion))
+    {
+        Console.WriteLine("Debe ingresar un número.");
+        opcion = 0;
+    }
+
+    switch (opcion)
+    {
+        case 1: Listar();  break;
+        case 2: Resumen(); break;
+        case 3: Buscar();  break;
+        case 4: Console.WriteLine("Fin."); break;
+        default: Console.WriteLine("Opción no válida."); break;
+    }
+}`,
+
+  poo: String.raw`class Estudiante
+{
+    public string Id;
+    public string Nombre;
+    public double Historia;
+    public double Matematica;
+    public double Lenguaje;
+
+    public Estudiante(string id, string nombre, double historia,
+                      double matematica, double lenguaje)
+    {
+        Id = id;
+        Nombre = nombre;
+        Historia = historia;
+        Matematica = matematica;
+        Lenguaje = lenguaje;
+    }
+
+    public double CalcularPromedio()
+    {
+        return (Historia + Matematica + Lenguaje) / 3;
+    }
+}`,
+
+  array: String.raw`Estudiante[] estudiantes = new Estudiante[cantidad]; // casillas en null
+
+for (int i = 0; i < cantidad; i++)
+{
+    // ... pedir datos ...
+    estudiantes[i] = new Estudiante(id, nombre, historia); // aquí NACE el objeto
+}`,
+
+  prestar: String.raw`class Equipo
+{
+    public string Codigo;
+    public string Tipo;
+    public string Marca;
+    public bool Disponible = true;
+
+    public Equipo(string codigo, string tipo, string marca)
+    {
+        Codigo = codigo;
+        Tipo = tipo;
+        Marca = marca;
+    }
+
+    public bool Prestar()
+    {
+        if (!Disponible)
+        {
+            return false;   // la regla vive en el objeto
+        }
+
+        Disponible = false;
+        return true;
+    }
+}`,
+
+  maestro: String.raw`using System;
+using System.IO;
+
+class Alumno
+{
+    public string Run;
+    public string Nombre;
+    public double Nota;
+
+    public Alumno(string run, string nombre, double nota)
+    {
+        Run = run;
+        Nombre = nombre;
+        Nota = nota;
+    }
+}
+
+class Program
+{
+    static string carpeta = "Datos";
+    static string archivo = Path.Combine(carpeta, "alumnos.txt");
+
+    static void Main()
+    {
+        Directory.CreateDirectory(carpeta);
+        if (!File.Exists(archivo)) File.WriteAllText(archivo, "");
+
+        int opcion = 0;
+        while (opcion != 4)
+        {
+            Console.WriteLine("\n1. Registrar  2. Listar  3. Buscar  4. Salir");
+            if (!int.TryParse(Console.ReadLine(), out opcion)) opcion = 0;
+
+            switch (opcion)
+            {
+                case 1: Registrar(); break;
+                case 2: Listar();    break;
+                case 3: Buscar();    break;
+                case 4: Console.WriteLine("Fin."); break;
+                default: Console.WriteLine("Opción no válida."); break;
+            }
+        }
+    }
+
+    static void Registrar()
+    {
+        Console.Write("RUN: ");
+        string run = Console.ReadLine();
+        Console.Write("Nombre: ");
+        string nombre = Console.ReadLine();
+
+        double nota;
+        Console.Write("Nota: ");
+        while (!double.TryParse(Console.ReadLine(), out nota))
+        {
+            Console.Write("Nota inválida: ");
+        }
+
+        File.AppendAllText(archivo, run + ";" + nombre + ";" + nota + "\n");
+    }
+
+    static void Listar()
+    {
+        string[] lineas = File.ReadAllLines(archivo);
+        if (lineas.Length == 0)
+        {
+            Console.WriteLine("Sin registros.");
+            return;
+        }
+
+        foreach (string linea in lineas)
+        {
+            Alumno a = Convertir(linea);
+            Console.WriteLine(a.Run + " - " + a.Nombre + " - " + a.Nota);
+        }
+    }
+
+    static void Buscar()
+    {
+        Console.Write("RUN a buscar: ");
+        string buscado = Console.ReadLine();
+
+        foreach (string linea in File.ReadAllLines(archivo))
+        {
+            Alumno a = Convertir(linea);
+            if (a.Run == buscado)
+            {
+                Console.WriteLine("Encontrado: " + a.Nombre + " - " + a.Nota);
+                return;
+            }
+        }
+
+        Console.WriteLine("No se encontró.");
+    }
+
+    static Alumno Convertir(string linea)
+    {
+        string[] datos = linea.Split(';');
+        return new Alumno(datos[0], datos[1], double.Parse(datos[2]));
+    }
+}`,
+
+  corrupta: String.raw`string[] datos = linea.Split(';');
+if (datos.Length != 3)
+{
+    continue;   // línea incompleta: se ignora
+}`,
+
+  /* ---------- retos ---------- */
+  e1_starter: String.raw`using System;
+
+class Program
+{
+    static void Main()
+    {
+        // 1. Arma la ruta de la carpeta Base_Datos dentro de Documentos
+        // 2. Arma la ruta completa de datos.txt
+        // 3. Crea la carpeta si no existe
+        // 4. Crea el archivo si no existe
+        // 5. Muestra la ruta final en pantalla
+    }
+}`,
+
+  e1_sol: String.raw`using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        string carpeta = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            "Base_Datos");
+        string archivo = Path.Combine(carpeta, "datos.txt");
+
+        Directory.CreateDirectory(carpeta);
+
+        if (!File.Exists(archivo))
+        {
+            File.WriteAllText(archivo, "");
+        }
+
+        Console.WriteLine("Archivo listo en: " + archivo);
+    }
+}`,
+
+  e2_starter: String.raw`using System;
+using System.IO;
+
+class Program
+{
+    static string archivo = "ventas.txt";
+
+    static void Main()
+    {
+        Directory.CreateDirectory("Registro_Ventas");
+        archivo = Path.Combine("Registro_Ventas", "ventas.txt");
+
+        if (!File.Exists(archivo))
+        {
+            File.WriteAllText(archivo, "");
+        }
+
+        RegistrarVenta();
+    }
+
+    static void RegistrarVenta()
+    {
+        // Pide vendedor, producto y monto.
+        // Valida el monto (TryParse y mayor que cero).
+        // Guarda una línea con formato: vendedor;producto;monto
+    }
+}`,
+
+  e2_sol: String.raw`using System;
+using System.IO;
+
+class Program
+{
+    static string archivo = "ventas.txt";
+
+    static void Main()
+    {
+        Directory.CreateDirectory("Registro_Ventas");
+        archivo = Path.Combine("Registro_Ventas", "ventas.txt");
+
+        if (!File.Exists(archivo))
+        {
+            File.WriteAllText(archivo, "");
+        }
+
+        RegistrarVenta();
+    }
+
+    static void RegistrarVenta()
+    {
+        Console.Write("Vendedor: ");
+        string vendedor = Console.ReadLine();
+
+        Console.Write("Producto: ");
+        string producto = Console.ReadLine();
+
+        double monto;
+        Console.Write("Monto: ");
+        while (!double.TryParse(Console.ReadLine(), out monto) || monto <= 0)
+        {
+            Console.Write("Monto inválido: ");
+        }
+
+        string registro = vendedor + ";" + producto + ";" + monto;
+        File.AppendAllText(archivo, registro + "\n");
+
+        Console.WriteLine("Venta registrada.");
+    }
+}`,
+
+  e3_starter: String.raw`using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        CalcularResumen("Registro_Ventas/ventas.txt");
+    }
+
+    static void CalcularResumen(string archivo)
+    {
+        // 1. Lee todas las líneas del archivo
+        // 2. Recorre cada línea y córtala con Split(';')
+        // 3. Acumula la cantidad de ventas y el monto total
+        // 4. Muestra cantidad y total
+    }
+}`,
+
+  e3_sol: String.raw`using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        CalcularResumen("Registro_Ventas/ventas.txt");
+    }
+
+    static void CalcularResumen(string archivo)
+    {
+        if (!File.Exists(archivo))
+        {
+            Console.WriteLine("No existen ventas registradas.");
+            return;
+        }
+
+        string[] lineas = File.ReadAllLines(archivo);
+
+        int cantidad = 0;
+        double total = 0;
+
+        foreach (string linea in lineas)
+        {
+            string[] datos = linea.Split(';');
+            if (datos.Length != 3)
+            {
+                continue;
+            }
+
+            double monto = double.Parse(datos[2]);
+            cantidad++;
+            total += monto;
+        }
+
+        Console.WriteLine("Cantidad de ventas: " + cantidad);
+        Console.WriteLine("Monto total: $" + total);
+    }
+}`,
+
+  e4_starter: String.raw`using System;
+
+class Estudiante
+{
+    // 1. Atributos: Id, Nombre, Historia, Matematica, Lenguaje
+    // 2. Constructor que reciba los cinco datos
+    // 3. CalcularPromedio(): (Historia + Matematica + Lenguaje) / 3
+    // 4. MostrarInformacion(): muestra los datos y el promedio
+}
+
+class Program
+{
+    static void Main()
+    {
+    }
+}`,
+
+  e4_sol: String.raw`using System;
+
+class Estudiante
+{
+    public string Id;
+    public string Nombre;
+    public double Historia;
+    public double Matematica;
+    public double Lenguaje;
+
+    public Estudiante(string id, string nombre, double historia,
+                      double matematica, double lenguaje)
+    {
+        Id = id;
+        Nombre = nombre;
+        Historia = historia;
+        Matematica = matematica;
+        Lenguaje = lenguaje;
+    }
+
+    public double CalcularPromedio()
+    {
+        return (Historia + Matematica + Lenguaje) / 3;
+    }
+
+    public void MostrarInformacion()
+    {
+        Console.WriteLine("Id: " + Id);
+        Console.WriteLine("Nombre: " + Nombre);
+        Console.WriteLine("Historia: " + Historia);
+        Console.WriteLine("Matemática: " + Matematica);
+        Console.WriteLine("Lenguaje: " + Lenguaje);
+        Console.WriteLine("Promedio: " + CalcularPromedio().ToString("F2"));
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Estudiante e = new Estudiante("A001", "Ana", 6.5, 5.8, 7.0);
+        e.MostrarInformacion();
+    }
+}`,
+
+  e5_starter: String.raw`class Equipo
+{
+    // 1. Atributos: Codigo, Tipo, Marca y Disponible (en true)
+    // 2. Constructor que reciba codigo, tipo y marca
+    // 3. Prestar(): bool
+    //    - si ya no está disponible, devuelve false
+    //    - si se puede, márcalo como no disponible y devuelve true
+}`,
+
+  e5_sol: String.raw`class Equipo
+{
+    public string Codigo;
+    public string Tipo;
+    public string Marca;
+    public bool Disponible = true;
+
+    public Equipo(string codigo, string tipo, string marca)
+    {
+        Codigo = codigo;
+        Tipo = tipo;
+        Marca = marca;
+    }
+
+    public bool Prestar()
+    {
+        if (!Disponible)
+        {
+            return false;
+        }
+
+        Disponible = false;
+        return true;
+    }
+}`,
+
+  bugA: String.raw`using System;
+using System.IO;
+
+class Program
+{
+    static string carpeta = "Registro_Ventas";
+    static string archivo = Path.Combine(carpeta, "ventas.txt");
+
+    static void Main()
+    {
+        Directory.CreateDirectory(carpeta);
+        if (!File.Exists(archivo))
+        {
+            File.WriteAllText(archivo, "");
+        }
+
+        string respuesta;
+        do
+        {
+            Console.Write("Vendedor: ");
+            string vendedor = Console.ReadLine();
+            Console.Write("Producto: ");
+            string producto = Console.ReadLine();
+            Console.Write("Monto: ");
+            double monto = double.Parse(Console.ReadLine());
+
+            string registro = vendedor + ";" + producto + ";" + monto;
+
+            // Guarda la venta
+            File.WriteAllText(archivo, registro + "\n");
+
+            Console.Write("¿Otra venta? (S/N): ");
+            respuesta = Console.ReadLine();
+        } while (respuesta.ToUpper() == "S");
+
+        Console.WriteLine("Ventas guardadas en " + archivo);
+    }
+}`,
+
+  bugA_sol: String.raw`using System;
+using System.IO;
+
+class Program
+{
+    static string carpeta = "Registro_Ventas";
+    static string archivo = Path.Combine(carpeta, "ventas.txt");
+
+    static void Main()
+    {
+        Directory.CreateDirectory(carpeta);
+        if (!File.Exists(archivo))
+        {
+            File.WriteAllText(archivo, "");
+        }
+
+        string respuesta;
+        do
+        {
+            Console.Write("Vendedor: ");
+            string vendedor = Console.ReadLine();
+            Console.Write("Producto: ");
+            string producto = Console.ReadLine();
+            Console.Write("Monto: ");
+            double monto = double.Parse(Console.ReadLine());
+
+            string registro = vendedor + ";" + producto + ";" + monto;
+
+            // AppendAllText conserva las ventas anteriores
+            File.AppendAllText(archivo, registro + "\n");
+
+            Console.Write("¿Otra venta? (S/N): ");
+            respuesta = Console.ReadLine();
+        } while (respuesta.ToUpper() == "S");
+
+        Console.WriteLine("Ventas guardadas en " + archivo);
+    }
+}`,
+
+  bugB: String.raw`using System;
+
+class Equipo
+{
+    public string Codigo;
+    public bool Disponible = true;
+
+    public Equipo(string codigo)
+    {
+        Codigo = codigo;
+    }
+
+    public bool Prestar()
+    {
+        Disponible = false;
+        return true;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Equipo e = new Equipo("A001");
+
+        Console.WriteLine(e.Prestar());   // true
+        Console.WriteLine(e.Prestar());   // debería ser false
+    }
+}`,
+
+  bugB_sol: String.raw`using System;
+
+class Equipo
+{
+    public string Codigo;
+    public bool Disponible = true;
+
+    public Equipo(string codigo)
+    {
+        Codigo = codigo;
+    }
+
+    public bool Prestar()
+    {
+        if (!Disponible)
+        {
+            return false;
+        }
+
+        Disponible = false;
+        return true;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Equipo e = new Equipo("A001");
+
+        Console.WriteLine(e.Prestar());   // true
+        Console.WriteLine(e.Prestar());   // false
+    }
+}`,
+
+  bugC: String.raw`using System;
+using System.IO;
+
+class Program
+{
+    static void BuscarPorVendedor(string archivo)
+    {
+        Console.Write("Vendedor a buscar: ");
+        string buscado = Console.ReadLine();
+
+        string[] lineas = File.ReadAllLines(archivo);
+
+        for (int i = 0; i < lineas.Length; i++)
+        {
+            // Cada línea es: vendedor;producto;monto
+            if (lineas[i] == buscado)
+            {
+                Console.WriteLine(lineas[i]);
+            }
+        }
+    }
+}`,
+
+  bugC_sol: String.raw`using System;
+using System.IO;
+
+class Program
+{
+    static void BuscarPorVendedor(string archivo)
+    {
+        Console.Write("Vendedor a buscar: ");
+        string buscado = Console.ReadLine();
+
+        string[] lineas = File.ReadAllLines(archivo);
+
+        for (int i = 0; i < lineas.Length; i++)
+        {
+            string[] datos = lineaSplit(lineas[i]);
+
+            if (datos[0] == buscado)
+            {
+                Console.WriteLine(lineas[i]);
+            }
+        }
+    }
+
+    static string[] lineaSplit(string linea)
+    {
+        return linea.Split(';');
+    }
+}`
+};
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+function escaparHtml(s){
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+const PALABRAS = new Set(("using namespace class static public private protected void string int double bool if else while for foreach do switch case default break return new true false null out ref this const var continue").split(" "));
+const TIPOS = new Set("Console File Directory Path Environment Math Convert StreamWriter".split(" "));
+
+function resaltar(codigo){
+  const re = /(\/\/[^\n]*)|(@?"(?:[^"\\]|\\.)*")|(\b\d+(?:\.\d+)?\b)|([A-Za-z_]\w*)|(\s+)|([\s\S])/g;
+  const trozos = [];
+  let m;
+  while ((m = re.exec(codigo)) !== null) {
+    const [texto, comentario, cadena, numero, palabra] = m;
+    if (comentario)      trozos.push('<span class="c-com">' + escaparHtml(comentario) + '</span>');
+    else if (cadena)     trozos.push('<span class="c-str">' + escaparHtml(cadena) + '</span>');
+    else if (numero)     trozos.push('<span class="c-num">' + escaparHtml(numero) + '</span>');
+    else if (palabra) {
+      if (PALABRAS.has(palabra))      trozos.push('<span class="c-kw">' + palabra + '</span>');
+      else if (TIPOS.has(palabra))    trozos.push('<span class="c-type">' + palabra + '</span>');
+      else                            trozos.push(escaparHtml(palabra));
+    }
+    else trozos.push(escaparHtml(texto));
+  }
+  return trozos.join("");
+}
+
+function resaltarEn(pre, codigo){
+  pre.innerHTML = resaltar(codigo);
+}
+
+function normalizar(codigo){
+  return codigo
+    .replace(/\/\/[^\n]*/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function chk(etiqueta, prueba, pista){
+  return { etiqueta, prueba, pista };
+}
+
+/* ============================================================
+   ESTADO PERSISTENTE
+   ============================================================ */
+const CLAVE = "taller8.progreso.v1";
+let estado = { tareas: {}, armados: {}, quizMejor: 0, quizMejor2: 0, tarjetas: [] };
+try {
+  const guardado = JSON.parse(localStorage.getItem(CLAVE) || "null");
+  if (guardado && typeof guardado === "object") {
+    estado = Object.assign(estado, guardado);
+    if (!estado.tareas) estado.tareas = {};
+    if (!estado.armados) estado.armados = {};
+    if (typeof estado.quizMejor !== "number") estado.quizMejor = 0;
+    if (typeof estado.quizMejor2 !== "number") estado.quizMejor2 = 0;
+    if (!Array.isArray(estado.tarjetas)) estado.tarjetas = [];
+  }
+} catch (e) { /* sin almacenamiento: se sigue en memoria */ }
+
+function guardarEstado(){
+  try { localStorage.setItem(CLAVE, JSON.stringify(estado)); } catch (e) {}
+}
+
+/* ============================================================
+   RETOS
+   ============================================================ */
+const TAREAS = [
+  {
+    id: "e1", tipo: "build", num: "Ejercicio 1",
+    titulo: "Encender el archivo",
+    enunciado: "Este es el arranque de <code>Archivos_Creacion</code>: crear la carpeta, crear el archivo y mostrar la ruta. Escríbelo completo.",
+    pista: "Necesitas <code>using System.IO;</code>, <code>Path.Combine</code> para armar la ruta, <code>Directory.CreateDirectory</code> antes de escribir y <code>File.Exists</code> para no borrar lo que ya hay.",
+    inicial: SNIPPETS.e1_starter,
+    solucion: SNIPPETS.e1_sol,
+    notas: [
+      "<code>Directory.CreateDirectory</code> no falla si la carpeta ya existe: es idempotente.",
+      "<code>File.Exists</code> evita sobrescribir el archivo cuando ya tiene datos.",
+      "Sin <code>CreateDirectory</code>, <code>File.WriteAllText</code> lanza <code>DirectoryNotFoundException</code>."
+    ],
+    pruebas: [
+      chk("Incluyes using System.IO", n => /using\s+System\.IO\s*;/.test(n)),
+      chk("Construyes la ruta con Path.Combine", n => /Path\.Combine\s*\(/.test(n)),
+      chk("Creas la carpeta con Directory.CreateDirectory", n => /Directory\.CreateDirectory\s*\(/.test(n)),
+      chk("Preguntas si el archivo existe", n => /File\.Exists\s*\(/.test(n), "Falta la comprobación que evita sobrescribir el archivo."),
+      chk("Creas el archivo con File.WriteAllText", n => /File\.WriteAllText\s*\(/.test(n))
+    ]
+  },
+  {
+    id: "e2", tipo: "build", num: "Ejercicio 2",
+    titulo: "Registrar una venta",
+    enunciado: "Como <code>RegistrarVenta</code> de <code>Clase 09</code>: completa el método para que pida vendedor, producto y monto, valide el monto y <strong>agregue</strong> la venta como <code>vendedor;producto;monto</code>.",
+    pista: "El monto se valida con un <code>while</code> que se repite mientras <code>!double.TryParse(...)</code> o mientras sea menor o igual a cero. Para guardar, <code>AppendAllText</code> y termina la línea con <code>\\n</code>.",
+    inicial: SNIPPETS.e2_starter,
+    solucion: SNIPPETS.e2_sol,
+    notas: [
+      "El separador elegido es <code>;</code> y debe coincidir exactamente con el que usarás al leer.",
+      "El <code>\n</code> final es lo que separa un registro del siguiente.",
+      "La validación con <code>||</code> cubre dos fallas: texto no numérico y número no positivo."
+    ],
+    pruebas: [
+      chk("Pides los datos con Console.ReadLine", n => /Console\.ReadLine\s*\(\s*\)/.test(n)),
+      chk("Validas el monto con double.TryParse", n => /double\.TryParse\s*\(/.test(n), "Si usas double.Parse, una letra termina el programa."),
+      chk("Repites la validación con while", n => /while\s*\(/.test(n)),
+      chk("Guardas con File.AppendAllText", n => /File\.AppendAllText\s*\(/.test(n), "Con WriteAllText borrarías las ventas anteriores."),
+      chk("Usas ';' como separador de campos", n => /"[^"]*;[^"]*"/.test(n)),
+      chk("Terminas cada registro con salto de línea", n => /\\n|Environment\.NewLine/.test(n)),
+      chk("No sobrescribes el archivo con el registro", n => !/File\.WriteAllText\s*\(\s*archivo\s*,\s*registro/.test(n), "Quedó una escritura que reemplaza todo el archivo.")
+    ]
+  },
+  {
+    id: "e3", tipo: "build", num: "Ejercicio 3",
+    titulo: "Leer y resumir ventas",
+    enunciado: "Como <code>CalcularResumen</code> de <code>Clase 09</code>: lee el archivo, recorre cada línea, corta los campos y muestra la cantidad de ventas y el monto total.",
+    pista: "Declara <code>cantidad</code> y <code>total</code> antes del <code>foreach</code>. Dentro, corta la línea con <code>Split(';')</code>, convierte <code>datos[2]</code> a <code>double</code> y acumula.",
+    inicial: SNIPPETS.e3_starter,
+    solucion: SNIPPETS.e3_sol,
+    notas: [
+      "Los acumuladores se declaran fuera del bucle; si los declaras dentro, se reinician en cada vuelta.",
+      "Validar <code>datos.Length</code> evita excepciones con líneas incompletas.",
+      "<code>continue</code> salta la línea mala sin abandonar el recorrido."
+    ],
+    pruebas: [
+      chk("Lees el archivo con File.ReadAllLines", n => /File\.ReadAllLines\s*\(/.test(n)),
+      chk("Cortas cada línea con Split(';')", n => /Split\s*\(\s*';\s*'/.test(n)),
+      chk("Conviertes el monto a número", n => /double\.(Parse|TryParse)\s*\(/.test(n)),
+      chk("Recorres las líneas con for o foreach", n => /foreach\s*\(|for\s*\(/.test(n)),
+      chk("Acumulas el total con += ", n => /\+=/.test(n) || /total\s*=\s*total\s*\+/.test(n)),
+      chk("Muestras el resultado en pantalla", n => /Console\.WriteLine\s*\(/.test(n))
+    ]
+  },
+  {
+    id: "e4", tipo: "build", num: "Ejercicio 4",
+    titulo: "La clase Estudiante",
+    enunciado: "Como el ejercicio de la Semana 07-01: declara <code>Estudiante</code> con sus cinco atributos, un constructor que los reciba, <code>CalcularPromedio()</code> y <code>MostrarInformacion()</code>.",
+    pista: "El constructor asigna los cinco parámetros a los cinco atributos. El promedio es <code>(Historia + Matematica + Lenguaje) / 3</code>. Mostrar usa <code>Console.WriteLine</code> y puede llamar a <code>CalcularPromedio()</code>.",
+    inicial: SNIPPETS.e4_starter,
+    solucion: SNIPPETS.e4_sol,
+    notas: [
+      "El constructor garantiza que ningún estudiante quede a medio llenar.",
+      "<code>CalcularPromedio</code> no recibe parámetros: usa los atributos del propio objeto.",
+      "<code>MostrarInformacion</code> puede reutilizar el promedio en vez de repetir la fórmula."
+    ],
+    pruebas: [
+      chk("Declaras la clase Estudiante", n => /class\s+Estudiante/.test(n)),
+      chk("Declaras los 5 atributos", n => /public\s+string\s+(Id|ID)\s*;/i.test(n) && /public\s+string\s+Nombre\s*;/i.test(n) && /public\s+double\s+Historia\s*;/i.test(n) && /public\s+double\s+Matematica\s*;/i.test(n) && /public\s+double\s+Lenguaje\s*;/i.test(n), "Falta alguno de los atributos pedidos."),
+      chk("El constructor recibe los 5 datos", n => {
+        const m = n.match(/public\s+Estudiante\s*\(([^)]*)\)/);
+        return !!m && m[1].split(",").filter(x => x.trim().length > 0).length >= 5;
+      }, "El constructor debe recibir id, nombre y las tres notas."),
+      chk("El constructor asigna los parámetros a los atributos", n => /Id\s*=\s*id/.test(n) && /Nombre\s*=\s*nombre/i.test(n)),
+      chk("CalcularPromedio divide por 3", n => /return\s*\([^)]*\)\s*\/\s*3/.test(n)),
+      chk("MostrarInformacion escribe en pantalla", n => /void\s+MostrarInformacion\s*\([^)]*\)\s*\{[^}]*Console\.WriteLine/.test(n))
+    ]
+  },
+  {
+    id: "e5", tipo: "build", num: "Ejercicio 5",
+    titulo: "Prestar un equipo",
+    enunciado: "Como pide la Semana 07-02: la clase <code>Equipo</code> con su estado <code>Disponible</code> y un método <code>Prestar()</code> que respete la regla del enunciado.",
+    pista: "El atributo <code>Disponible</code> nace en <code>true</code>. En <code>Prestar()</code>, primero pregunta: si ya no está disponible, <code>return false</code>. Recién después marca <code>Disponible = false</code> y devuelve <code>true</code>.",
+    inicial: SNIPPETS.e5_starter,
+    solucion: SNIPPETS.e5_sol,
+    notas: [
+      "La regla vive dentro del método: el estado y su comportamiento van juntos.",
+      "El orden importa: si marcas <code>false</code> antes de revisar, el guard nunca se cumple.",
+      "Devolver <code>bool</code> permite que el menú decida qué mensaje mostrar."
+    ],
+    pruebas: [
+      chk("Declaras la clase Equipo", n => /class\s+Equipo/.test(n)),
+      chk("Disponible nace en true", n => /bool\s+Disponible\s*=\s*true/i.test(n)),
+      chk("Declaras public bool Prestar()", n => /public\s+bool\s+Prestar\s*\(\s*\)/.test(n)),
+      chk("Rechazas el préstamo si ya no está disponible", n => /if\s*\([^)]*Disponible[^)]*\)\s*\{?\s*return\s+false/.test(n), "Falta el guard que devuelve false cuando Disponible ya es false."),
+      chk("La regla va ANTES de marcar el equipo como no disponible", n => {
+        const g = n.search(/return\s+false/);
+        const a = n.search(/Disponible\s*=\s*false/);
+        return g !== -1 && a !== -1 && g < a;
+      }, "Estás marcando el equipo como no disponible antes de revisar la regla."),
+      chk("Devuelves true cuando el préstamo se concreta", n => /return\s+true/.test(n)),
+      chk("Marcas el equipo como no disponible al prestarlo", n => /Disponible\s*=\s*false/.test(n))
+    ]
+  }
+];
+
+const ERRORES = [
+  {
+    id: "b1", tipo: "fix", num: "Error 1",
+    titulo: "El registro que borra la historia",
+    enunciado: "El programa guarda ventas, pero al registrar la segunda desaparece la primera. El archivo queda con una sola línea. Encuentra la causa y corrige el código.",
+    pista: "Registra dos ventas mentalmente y sigue el archivo. ¿Qué método reemplaza el contenido completo cada vez que se ejecuta?",
+    original: SNIPPETS.bugA,
+    solucion: SNIPPETS.bugA_sol,
+    notas: [
+      "El error era <code>File.WriteAllText</code> dentro del bucle: reemplazaba el archivo en cada venta.",
+      "La preparación (carpeta y archivo vacío) estaba bien y debía mantenerse.",
+      "<code>AppendAllText</code> agrega al final; el salto de línea mantiene un registro por línea."
+    ],
+    pruebas: [
+      chk("Guardas con File.AppendAllText", n => /File\.AppendAllText\s*\(/.test(n), "El registro debe agregarse, no reemplazar el archivo."),
+      chk("Ya no usas File.WriteAllText con el registro", n => !/File\.WriteAllText\s*\(\s*archivo\s*,\s*registro/.test(n), "Todavía queda la escritura que borra las ventas anteriores."),
+      chk("Mantienes la preparación de carpeta y archivo", n => /Directory\.CreateDirectory\s*\(/.test(n) && /File\.Exists\s*\(/.test(n), "No borres el arranque: solo había un error."),
+      chk("Cada venta conserva su salto de línea", n => /\\n|Environment\.NewLine/.test(n)),
+      chk("Cada venta incluye los tres campos con ';'", n => /"[^"]*;[^"]*"/.test(n))
+    ]
+  },
+  {
+    id: "b2", tipo: "fix", num: "Error 2",
+    titulo: "El préstamo doble",
+    enunciado: "El mismo equipo se puede prestar dos veces: la segunda llamada también devuelve <code>true</code>. Según el enunciado, si el equipo ya está «No disponible» hay que informar que no se puede prestar. Corrige <code>Prestar()</code>.",
+    pista: "Dentro de <code>Prestar()</code> falta una pregunta antes de cambiar el estado. El atributo <code>Disponible</code> ya te dice todo lo que necesitas saber.",
+    original: SNIPPETS.bugB,
+    solucion: SNIPPETS.bugB_sol,
+    notas: [
+      "El guard <code>if (!Disponible) return false;</code> es la regla del enunciado.",
+      "Debe ir antes de <code>Disponible = false</code>; si va después, nunca se cumple.",
+      "El <code>Main</code> no cambia: el error estaba en el objeto, no en la interfaz."
+    ],
+    pruebas: [
+      chk("Devuelves false si el equipo ya no está disponible", n => /if\s*\([^)]*Disponible[^)]*\)\s*\{?\s*return\s+false/.test(n), "Falta el caso en que el préstamo debe rechazarse."),
+      chk("La pregunta va antes de marcar Disponible = false", n => {
+        const g = n.search(/return\s+false/);
+        const a = n.search(/Disponible\s*=\s*false/);
+        return g !== -1 && a !== -1 && g < a;
+      }, "Primero se revisa, después se cambia el estado."),
+      chk("Mantienes el retorno true del caso válido", n => /return\s+true/.test(n)),
+      chk("Mantienes el estado inicial en true", n => /bool\s+Disponible\s*=\s*true/i.test(n)),
+      chk("El estado pasa a false al prestar", n => /Disponible\s*=\s*false/.test(n))
+    ]
+  },
+  {
+    id: "b3", tipo: "fix", num: "Error 3",
+    titulo: "La búsqueda que nunca encuentra",
+    enunciado: "El archivo guarda <code>Ana;Cuaderno;4500</code>, pero la búsqueda por vendedor no encuentra a nadie aunque el nombre exista. Corrige la comparación sin perder la lectura del archivo.",
+    pista: "La línea completa no es igual al nombre: contiene producto y monto. Primero corta la línea y después compara el campo del vendedor.",
+    original: SNIPPETS.bugC,
+    solucion: SNIPPETS.bugC_sol,
+    notas: [
+      "El error era comparar <code>lineas[i] == buscado</code>: la línea incluye todos los campos.",
+      "El arreglo es <code>Split(';')</code> y comparar <code>datos[0]</code>.",
+      "Es el mismo patrón de <code>BuscarPorVendedor</code> en el registro de ventas."
+    ],
+    pruebas: [
+      chk("Cortas la línea con Split(';')", n => /Split\s*\(\s*';\s*'/.test(n), "Sin Split, no puedes aislar el campo del vendedor."),
+      chk("Comparas el campo del vendedor (datos[0])", n => /datos\s*\[\s*0\s*\]\s*==\s*buscado|buscado\s*==\s*datos\s*\[\s*0\s*\]|Equals\s*\(\s*buscado/.test(n), "Compara datos[0] con el nombre buscado."),
+      chk("Mantienes la lectura con ReadAllLines", n => /File\.ReadAllLines\s*\(/.test(n)),
+      chk("Ya no comparas la línea completa con el nombre", n => !/lineas\s*\[\s*i\s*\]\s*==\s*buscado/.test(n), "Todavía queda la comparación que nunca coincide.")
+    ]
+  }
+];
+
+/* ============================================================
+   RETOS DE ARRASTRE
+   ============================================================ */
+const ARMADOS = [
+  {
+    id: "a1", tipo: "orden", num: "Armado 1",
+    titulo: "Ordena el arranque y la primera venta",
+    enunciado: "Estas trece líneas forman un programa completo, pero están desordenadas. Colócalas en el orden correcto: primero los <code>using</code>, después la clase, los campos, y dentro del <code>Main</code> la carpeta, el archivo vacío y el registro de la venta.",
+    pista: "En C#, las declaraciones van dentro de la clase y las instrucciones dentro del método. La carpeta se crea antes de escribir el archivo, y el archivo vacío antes de agregar la primera venta.",
+    lineas: [
+      'using System;',
+      'using System.IO;',
+      'class Program',
+      '{',
+      '    static string carpeta = "Registro_Ventas";',
+      '    static string archivo = Path.Combine(carpeta, "ventas.txt");',
+      '    static void Main()',
+      '    {',
+      '        Directory.CreateDirectory(carpeta);',
+      '        if (!File.Exists(archivo)) File.WriteAllText(archivo, "");',
+      '        File.AppendAllText(archivo, "Ana;Cuaderno;4500\\n");',
+      '        Console.WriteLine("Venta guardada.");',
+      '    }',
+      '}'
+    ],
+    notas: [
+      "Los <code>using</code> van primero: sin <code>System.IO</code> no existen <code>File</code>, <code>Directory</code> ni <code>Path</code>.",
+      "El campo <code>archivo</code> se calcula con <code>Path.Combine</code> una sola vez, y <code>Main</code> usa ese campo.",
+      "La carpeta se crea antes que el archivo; el archivo se inicializa vacío antes de agregar la primera venta.",
+      "<code>AppendAllText</code> agrega al final y el <code>\\n</code> cierra el registro."
+    ]
+  },
+  {
+    id: "a2", tipo: "orden", num: "Armado 2",
+    titulo: "Arma la clase Estudiante",
+    enunciado: "Estas líneas forman la clase del ejercicio de POO: atributos, constructor con parámetros y método para mostrarse. Ordénalas respetando las llaves y la asignación <code>this.Nombre = nombre</code>.",
+    pista: "Dentro de la clase van primero los atributos, después el constructor y al final los métodos. El constructor se llama igual que la clase y no lleva tipo de retorno.",
+    lineas: [
+      'class Estudiante',
+      '{',
+      '    public string Nombre;',
+      '    public double Nota;',
+      '    public Estudiante(string nombre, double nota)',
+      '    {',
+      '        this.Nombre = nombre;',
+      '        this.Nota = nota;',
+      '    }',
+      '    public void Mostrar()',
+      '    {',
+      '        Console.WriteLine(Nombre + ": " + Nota);',
+      '    }',
+      '}'
+    ],
+    notas: [
+      "La clase es el molde: los atributos guardan el estado de cada estudiante.",
+      "El constructor no lleva tipo de retorno y asegura que el objeto nazca con sus datos.",
+      "<code>this.Nombre</code> es el atributo; <code>nombre</code> es el parámetro que llega.",
+      "El método <code>Mostrar()</code> vive dentro de la clase porque usa sus propios atributos."
+    ]
+  },
+  {
+    id: "a3", tipo: "orden", num: "Armado 3",
+    titulo: "Ordena la carga del archivo en objetos",
+    enunciado: "El programa lee el archivo de estudiantes, crea un objeto por línea y cuenta cuántos cargó. Ordénalas: primero la lectura, después el arreglo que los va a recibir, y dentro del <code>for</code> el corte de la línea y la creación del objeto.",
+    pista: "El arreglo se dimensiona con <code>lineas.Length</code> antes de recorrerlo. La variable <code>cantidad</code> arranca en 0 y es el índice del siguiente objeto libre.",
+    lineas: [
+      'using System;',
+      'using System.IO;',
+      'class Program',
+      '{',
+      '    static string archivo = "estudiantes.txt";',
+      '    static void Main()',
+      '    {',
+      '        string[] lineas = File.ReadAllLines(archivo);',
+      '        Estudiante[] estudiantes = new Estudiante[lineas.Length];',
+      '        int cantidad = 0;',
+      '        for (int i = 0; i < lineas.Length; i++)',
+      '        {',
+      '            string[] datos = lineas[i].Split(\';\');',
+      '            estudiantes[cantidad] = new Estudiante(datos[0], double.Parse(datos[1]));',
+      '            cantidad++;',
+      '        }',
+      '        Console.WriteLine("Cargados: " + cantidad);',
+      '    }',
+      '}'
+    ],
+    notas: [
+      "La clase <code>Estudiante</code> es la del Armado 2: el programa la usa, no la vuelve a definir.",
+      "<code>ReadAllLines</code> devuelve un arreglo de textos, uno por línea del archivo.",
+      "El arreglo de objetos se crea con el mismo tamaño que las líneas, así siempre hay lugar.",
+      "<code>new Estudiante(datos[0], double.Parse(datos[1]))</code> reconstruye el objeto con los campos del registro.",
+      "<code>cantidad</code> cuenta los objetos creados y sirve como índice del siguiente hueco libre."
+    ]
+  },
+  {
+    id: "a4", tipo: "orden", num: "Armado 4",
+    titulo: "Ordena la clase Equipo con préstamo y devolución",
+    enunciado: "La clase <code>Equipo</code> nace disponible, se presta una sola vez y vuelve a estar disponible al devolverla. Ordena atributos, constructor, <code>Prestar()</code> y <code>Devolver()</code> respetando las llaves.",
+    pista: "El orden dentro de la clase es: estado (atributos), constructor, y después los métodos en el orden en que se usan. El guard de <code>Prestar()</code> va antes de cambiar el estado.",
+    lineas: [
+      'public class Equipo',
+      '{',
+      '    public string Nombre;',
+      '    public bool Disponible;',
+      '    public Equipo(string nombre)',
+      '    {',
+      '        this.Nombre = nombre;',
+      '        Disponible = true;',
+      '    }',
+      '    public bool Prestar()',
+      '    {',
+      '        if (!Disponible) return false;',
+      '        Disponible = false;',
+      '        return true;',
+      '    }',
+      '    public void Devolver()',
+      '    {',
+      '        Disponible = true;',
+      '    }',
+      '}'
+    ],
+    notas: [
+      "Los atributos van dentro de la clase y antes del constructor: describen el estado de cada objeto.",
+      "El constructor deja el equipo listo para prestarse (<code>Disponible = true</code>).",
+      "<code>Prestar()</code> devuelve <code>bool</code> porque el <code>Main</code> necesita saber si funcionó.",
+      "<code>Devolver()</code> no devuelve nada: solo restaura el estado."
+    ]
+  },
+  {
+    id: "h1", tipo: "huecos", num: "Huecos 1",
+    titulo: "Buscar un vendedor en el archivo",
+    enunciado: "El programa lee las ventas con <code>ReadAllLines</code> y busca a un vendedor. Completa el <code>for</code>, el <code>Split</code> y la condición. Sobran bloques: dos de ellos producen errores clásicos.",
+    pista: "Con <code>Split(';')</code> el vendedor queda en <code>datos[0]</code>. Recuerda que el último índice válido es <code>Length - 1</code> y que la comparación es entre textos.",
+    filas: [
+      'Console.Write("Vendedor a buscar: ");',
+      'string buscado = Console.ReadLine();',
+      'string[] lineas = File.ReadAllLines(archivo);',
+      { gap: 'for (int i = 0; i < lineas.Length; i++)' },
+      '{',
+      { gap: '    string[] datos = lineas[i].Split(\';\');' },
+      { gap: '    if (datos[0] == buscado)' },
+      '    {',
+      '        Console.WriteLine("Producto: " + datos[1] + " | Monto: " + datos[2]);',
+      '    }',
+      '}'
+    ],
+    distractores: [
+      'for (int i = 0; i <= lineas.Length; i++)',
+      '    string[] datos = lineas[i].Split(\',\');',
+      '    if (lineas[i] == buscado)',
+      '    if (datos[0] = buscado)'
+    ],
+    notas: [
+      "<code>i <= lineas.Length</code> se pasa del último índice y lanza <code>IndexOutOfRangeException</code>.",
+      "<code>Split(',')</code> no corta nada: los campos usan <code>;</code>.",
+      "Comparar <code>lineas[i] == buscado</code> nunca coincide: la línea incluye producto y monto.",
+      "El vendedor es el campo 0 después de separar."
+    ]
+  },
+  {
+    id: "h2", tipo: "huecos", num: "Huecos 2",
+    titulo: "Completa el menú que no se cae",
+    enunciado: "Este menú repite opciones hasta que el usuario elige 3 y valida lo que escribe. Faltan la conversión segura, la recuperación tras un dato inválido y la llamada que registra la venta.",
+    pista: "<code>TryParse</code> devuelve <code>false</code> sin lanzar excepción. Si falla, hay que dejar la opción en un valor que no ejecute nada y volver a preguntar.",
+    filas: [
+      'int opcion = 0;',
+      'while (opcion != 3)',
+      '{',
+      '    Console.WriteLine("1) Registrar  2) Ver  3) Salir");',
+      { gap: '    if (!int.TryParse(Console.ReadLine(), out opcion))' },
+      '    {',
+      '        Console.WriteLine("Escribe un número válido.");',
+      { gap: '        opcion = 0;' },
+      '        continue;',
+      '    }',
+      '    switch (opcion)',
+      '    {',
+      '        case 1:',
+      { gap: '            RegistrarVenta();' },
+      '            break;',
+      '        case 2:',
+      '            MostrarVentas();',
+      '            break;',
+      '    }',
+      '}'
+    ],
+    distractores: [
+      '    if (!int.Parse(Console.ReadLine()))',
+      '    if (!double.TryParse(Console.ReadLine(), out opcion))',
+      '        opcion = 1;',
+      '            RegistrarVenta'
+    ],
+    notas: [
+      "<code>int.Parse</code> lanza <code>FormatException</code> si el usuario escribe letras: el programa termina.",
+      "Si <code>TryParse</code> falla, <code>opcion</code> queda en 0 y el bucle vuelve a mostrar el menú.",
+      "<code>continue</code> salta el <code>switch</code> para no ejecutar la opción anterior.",
+      "La llamada lleva paréntesis y punto y coma: <code>RegistrarVenta();</code>."
+    ]
+  },
+  {
+    id: "h3", tipo: "huecos", num: "Huecos 3",
+    titulo: "Completa el préstamo de equipos",
+    enunciado: "La clase <code>Equipo</code> debe nacer disponible y rechazar un segundo préstamo. Faltan la inicialización del estado, la condición del guard y los dos cambios de estado. Arrastra también el mensaje que informa el rechazo.",
+    pista: "La regla del enunciado va dentro de <code>Prestar()</code>: primero se pregunta, después se cambia el estado. Si no está disponible, se informa y se devuelve <code>false</code>.",
+    filas: [
+      'public class Equipo',
+      '{',
+      '    public string Nombre;',
+      '    public bool Disponible;',
+      '    public Equipo(string nombre)',
+      '    {',
+      '        this.Nombre = nombre;',
+      { gap: '        Disponible = true;' },
+      '    }',
+      '    public bool Prestar()',
+      '    {',
+      { gap: '        if (!Disponible)' },
+      '        {',
+      { gap: '            Console.WriteLine("Equipo no disponible.");' },
+      '            return false;',
+      '        }',
+      { gap: '        Disponible = false;' },
+      '        return true;',
+      '    }',
+      '}'
+    ],
+    distractores: [
+      '        Disponible == true;',
+      '        if (Disponible == true)',
+      '            Console.WriteLine("Equipo prestado.");',
+      '        Prestar();'
+    ],
+    notas: [
+      "Todo equipo nuevo comienza disponible: <code>Disponible = true;</code> en el constructor.",
+      "El guard revisa primero: <code>if (!Disponible)</code> significa «si no está disponible».",
+      "El mensaje se escribe antes del <code>return false</code>, en el camino del rechazo.",
+      "Solo si pasa el guard se marca <code>Disponible = false</code> y se devuelve <code>true</code>."
+    ]
+  },
+  {
+    id: "h4", tipo: "huecos", num: "Huecos 4",
+    titulo: "Completa el resumen de ventas",
+    enunciado: "El programa recorre las ventas y calcula cuántas hay y cuánto suman. Faltan la conversión del monto y la acumulación. Uno de los bloques de más reemplaza el total en vez de sumarlo.",
+    pista: "El monto está en <code>datos[2]</code> y es texto. Para acumular necesitas el valor anterior más el nuevo; <code>total = monto;</code> lo sobrescribe.",
+    filas: [
+      'double total = 0;',
+      'int cantidad = 0;',
+      'for (int i = 0; i < lineas.Length; i++)',
+      '{',
+      "    string[] datos = lineas[i].Split(';');",
+      '    double monto;',
+      { gap: '    if (double.TryParse(datos[2], out monto))' },
+      '    {',
+      { gap: '        total = total + monto;' },
+      '        cantidad++;',
+      '    }',
+      '}',
+      'Console.WriteLine("Ventas registradas: " + cantidad);',
+      'Console.WriteLine("Total recaudado: " + total);'
+    ],
+    distractores: [
+      '    if (int.TryParse(datos[2], out monto))',
+      '        total = monto;',
+      '        total++;',
+      '        cantidad = cantidad + monto;'
+    ],
+    notas: [
+      "<code>int.TryParse</code> no sirve para <code>double monto</code>: el tipo debe coincidir.",
+      "<code>total = monto;</code> deja solo la última venta; hay que acumular con <code>total + monto</code>.",
+      "<code>cantidad++</code> cuenta registros, no pesos: no se mezcla con el monto.",
+      "Validar con <code>TryParse</code> evita que una línea corrupta termine el programa."
+    ]
+  },
+  {
+    id: "h5", tipo: "huecos", num: "Huecos 5",
+    titulo: "Ignora las líneas corruptas al cargar",
+    enunciado: "El archivo puede traer una línea incompleta. Este programa crea un objeto <code>Venta</code> por cada línea válida y avisa de las que no lo son. Faltan la condición que revisa los campos y la creación del objeto. La clase <code>Venta</code> tiene el constructor <code>Venta(string vendedor, double monto)</code>.",
+    pista: "Un registro válido tiene tres campos, así que <code>datos.Length</code> debe llegar al menos a 3. Sin esa revisión, <code>datos[2]</code> apunta fuera del arreglo y el programa se cae.",
+    filas: [
+      'string[] lineas = File.ReadAllLines(archivo);',
+      'int cantidad = 0;',
+      'Venta[] ventas = new Venta[lineas.Length];',
+      'for (int i = 0; i < lineas.Length; i++)',
+      '{',
+      "    string[] datos = lineas[i].Split(';');",
+      { gap: '    if (datos.Length >= 3)' },
+      '    {',
+      { gap: '        ventas[cantidad] = new Venta(datos[0], double.Parse(datos[2]));' },
+      '        cantidad++;',
+      '    }',
+      '    else',
+      '    {',
+      '        Console.WriteLine("Línea ignorada: " + lineas[i]);',
+      '    }',
+      '}'
+    ],
+    distractores: [
+      '    if (datos.Length > 3)',
+      '    if (datos.Length >= 2)',
+      '        ventas[cantidad] = new Venta(datos[0], datos[2]);',
+      '        ventas[cantidad] = datos[2];'
+    ],
+    notas: [
+      "<code>datos.Length >= 3</code> acepta exactamente el mínimo necesario; <code>&gt; 3</code> rechazaría registros correctos.",
+      "<code>&gt;= 2</code> deja pasar líneas sin monto y <code>datos[2]</code> lanza <code>IndexOutOfRangeException</code>.",
+      "El segundo argumento del constructor es <code>double</code>: hay que convertir con <code>double.Parse</code>.",
+      "Las líneas inválidas se informan y se saltan: el resto del archivo se carga igual."
+    ]
+  },
+  {
+    id: "h6", tipo: "huecos", num: "Huecos 6",
+    titulo: "Registra una venta sin borrar las anteriores",
+    enunciado: "Este método pide los datos de una venta y la agrega al archivo. Faltan la validación del monto, la salida cuando el dato es inválido y la escritura del registro. Uno de los bloques de más vacía el archivo completo.",
+    pista: "Si el monto no es un número, el método termina con <code>return</code> sin tocar el archivo. Para agregar sin perder lo anterior se usa <code>AppendAllText</code>, y el registro cierra con <code>\\n</code>.",
+    filas: [
+      'static void RegistrarVenta()',
+      '{',
+      '    Console.Write("Vendedor: ");',
+      '    string vendedor = Console.ReadLine();',
+      '    Console.Write("Monto: ");',
+      '    double monto;',
+      { gap: '    if (!double.TryParse(Console.ReadLine(), out monto))' },
+      '    {',
+      '        Console.WriteLine("Monto inválido. No se guardó nada.");',
+      { gap: '        return;' },
+      '    }',
+      { gap: '    File.AppendAllText(archivo, vendedor + ";" + monto + "\\n");' },
+      '    Console.WriteLine("Venta registrada.");',
+      '}'
+    ],
+    distractores: [
+      '    File.WriteAllText(archivo, vendedor + ";" + monto + "\\n");',
+      '    File.AppendAllText(archivo, vendedor + ";" + monto);',
+      '        break;',
+      '    if (!double.TryParse(Console.ReadLine()))'
+    ],
+    notas: [
+      "<code>TryParse</code> recibe el texto y la variable de salida: sin <code>out monto</code> no compila.",
+      "<code>return</code> sale del método antes de escribir: el archivo queda intacto.",
+      "<code>WriteAllText</code> reemplaza todo el contenido; aquí borraría las ventas anteriores.",
+      "Sin el <code>\\n</code> final, el siguiente registro se pega al anterior y el archivo queda corrupto."
+    ]
+  }
+];
+
+/* ============================================================
+   RENDER DE RETOS
+   ============================================================ */
+function crearTarjeta(t){
+  const art = document.createElement("article");
+  art.className = "task";
+  art.id = "task-" + t.id;
+
+  const bloqueOriginal = t.tipo === "fix"
+    ? '<div class="orig"><div class="label">Código original (con error)</div><pre class="code" data-orig></pre></div>'
+    : "";
+
+  art.innerHTML =
+    '<div class="task-head">' +
+      '<span class="chip">' + t.num + '</span>' +
+      '<h3>' + t.titulo + '</h3>' +
+      '<span class="status" data-status>Pendiente</span>' +
+    '</div>' +
+    '<p class="prompt">' + t.enunciado + '</p>' +
+    '<div class="task-body">' +
+      '<div class="task-left">' +
+        bloqueOriginal +
+        '<details class="hint"><summary>Pista</summary><p>' + t.pista + '</p></details>' +
+        '<ul class="checklist" data-checks aria-live="polite"></ul>' +
+      '</div>' +
+      '<div class="task-right">' +
+        '<div class="label">' + (t.tipo === "fix" ? "Tu corrección" : "Tu código") + '</div>' +
+        '<textarea spellcheck="false" wrap="off" data-editor></textarea>' +
+        '<div class="actions">' +
+          '<button class="btn primary" type="button" data-check>Comprobar</button>' +
+          '<button class="btn ghost" type="button" data-sol>Ver solución</button>' +
+          '<button class="btn ghost" type="button" data-reset>Restaurar</button>' +
+        '</div>' +
+        '<div class="feedback" data-fb aria-live="polite"></div>' +
+        '<div class="solution hidden" data-solution>' +
+          '<div class="label">Solución comentada</div>' +
+          '<pre class="code" data-solpre></pre>' +
+          '<ul class="notes">' + t.notas.map(n => "<li>" + n + "</li>").join("") + '</ul>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  const editor = art.querySelector("[data-editor]");
+  const orig = art.querySelector("[data-orig]");
+  const solPre = art.querySelector("[data-solpre]");
+  const lista = art.querySelector("[data-checks]");
+  const fb = art.querySelector("[data-fb]");
+  const solBox = art.querySelector("[data-solution]");
+  const estadoChip = art.querySelector("[data-status]");
+
+  editor.value = t.tipo === "fix" ? t.original : t.inicial;
+  if (orig) resaltarEn(orig, t.original);
+  resaltarEn(solPre, t.solucion);
+
+  function pintarEstado(){
+    if (estado.tareas[t.id]) {
+      estadoChip.textContent = "Completado";
+      estadoChip.classList.add("done");
+    } else {
+      estadoChip.textContent = "Pendiente";
+      estadoChip.classList.remove("done");
+    }
+  }
+  pintarEstado();
+
+  function pintarPendientes(){
+    lista.innerHTML = t.pruebas
+      .map(p => '<li><span class="mark">·</span><div>' + p.etiqueta + '</div></li>')
+      .join("");
+  }
+  pintarPendientes();
+
+  art.__cargarGuardado = function(){
+    const guardado = estado.tareas[t.id];
+    if (guardado && typeof guardado === "object" && typeof guardado.codigo === "string") {
+      editor.value = guardado.codigo;
+      comprobar(true);
+    }
+  };
+
+  art.querySelector("[data-check]").addEventListener("click", function(){
+    comprobar(false);
+  });
+
+  function comprobar(silencioso){
+    const n = normalizar(editor.value);
+    const resultados = t.pruebas.map(p => ({ etiqueta: p.etiqueta, pista: p.pista, ok: !!p.prueba(n) }));
+
+    lista.innerHTML = resultados.map(r =>
+      '<li class="' + (r.ok ? "ok" : "no") + '">' +
+        '<span class="mark">' + (r.ok ? "✓" : "✗") + '</span>' +
+        '<div>' + r.etiqueta + (r.ok || !r.pista ? "" : '<small>' + r.pista + '</small>') + '</div>' +
+      '</li>'
+    ).join("");
+
+    const correctas = resultados.filter(r => r.ok).length;
+    const total = resultados.length;
+
+    if (correctas === total) {
+      if (!silencioso) {
+        fb.className = "feedback show ok";
+        fb.innerHTML = "<strong>Correcto.</strong> Pasaste las " + total + " verificaciones. Tu solución cubre los puntos clave del ejercicio. Compárala con la solución comentada para revisar el estilo.";
+      }
+      estado.tareas[t.id] = { ok: true, codigo: editor.value };
+      guardarEstado();
+      actualizarProgreso();
+      pintarEstado();
+    } else {
+      if (!silencioso) {
+        fb.className = "feedback show bad";
+        fb.innerHTML = "<strong>" + correctas + " de " + total + ".</strong> Todavía falta algo. Revisa los puntos marcados con ✗ y las pistas en gris.";
+      }
+      if (estado.tareas[t.id]) {
+        delete estado.tareas[t.id];
+        guardarEstado();
+        actualizarProgreso();
+        pintarEstado();
+      }
+    }
+  }
+
+  art.querySelector("[data-sol]").addEventListener("click", function(){
+    const oculto = solBox.classList.toggle("hidden");
+    this.textContent = oculto ? "Ver solución" : "Ocultar solución";
+  });
+
+  art.querySelector("[data-reset]").addEventListener("click", function(){
+    editor.value = t.tipo === "fix" ? t.original : t.inicial;
+    pintarPendientes();
+    fb.className = "feedback";
+    fb.innerHTML = "";
+    solBox.classList.add("hidden");
+    art.querySelector("[data-sol]").textContent = "Ver solución";
+    if (estado.tareas[t.id]) {
+      delete estado.tareas[t.id];
+      guardarEstado();
+      actualizarProgreso();
+      pintarEstado();
+    }
+  });
+
+  editor.addEventListener("keydown", function(e){
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const inicio = this.selectionStart;
+      const fin = this.selectionEnd;
+      this.value = this.value.slice(0, inicio) + "    " + this.value.slice(fin);
+      this.selectionStart = this.selectionEnd = inicio + 4;
+    }
+  });
+
+  return art;
+}
+
+const contBuild = document.getElementById("tasks-build");
+const contFix = document.getElementById("tasks-fix");
+TAREAS.forEach(t => contBuild.appendChild(crearTarjeta(t)));
+ERRORES.forEach(t => contFix.appendChild(crearTarjeta(t)));
+
+const TODAS = TAREAS.concat(ERRORES);
+document.querySelectorAll(".task").forEach(card => {
+  if (card.__cargarGuardado) card.__cargarGuardado();
+});
+
+/* ============================================================
+   RENDER DE RETOS DE ARRASTRE
+   ============================================================ */
+function normalizarLinea(s){
+  return s.replace(/\s+/g, " ").trim();
+}
+
+function crearArmado(a){
+  const art = document.createElement("article");
+  art.className = "armado";
+  art.id = "armado-" + a.id;
+  const esOrden = a.tipo === "orden";
+
+  const filasModelo = [];
+  const bloques = [];
+  if (esOrden) {
+    a.lineas.forEach(function(txt, i){
+      filasModelo.push({ slot: true, texto: txt, n: i + 1 });
+      bloques.push({ id: "L" + i, texto: txt });
+    });
+  } else {
+    let gap = 0;
+    a.filas.forEach(function(f){
+      if (typeof f === "string") {
+        filasModelo.push({ slot: false, texto: f });
+      } else {
+        gap++;
+        filasModelo.push({ slot: true, texto: f.gap, n: gap });
+        bloques.push({ id: "G" + (gap - 1), texto: f.gap });
+      }
+    });
+    (a.distractores || []).forEach(function(txt, i){
+      bloques.push({ id: "D" + i, texto: txt });
+    });
+  }
+  const porId = {};
+  bloques.forEach(function(b){ porId[b.id] = b; });
+
+  art.innerHTML =
+    '<div class="task-head">' +
+      '<span class="chip">' + a.num + '</span>' +
+      '<h3>' + a.titulo + '</h3>' +
+      '<span class="status" data-status>Pendiente</span>' +
+    '</div>' +
+    '<p class="prompt">' + a.enunciado + '</p>' +
+    '<div class="armado-body">' +
+      '<div class="armado-col">' +
+        '<div class="label">' + (esOrden ? "Programa desarmado · ordena las líneas" : "Programa incompleto · llena los huecos") + '</div>' +
+        '<div class="codigo-armado" data-codigo></div>' +
+        '<details class="hint"><summary>Pista</summary><p>' + a.pista + '</p></details>' +
+        '<ul class="checklist" data-checks aria-live="polite"></ul>' +
+      '</div>' +
+      '<div class="armado-col">' +
+        '<div class="label">Bloques disponibles</div>' +
+        '<div class="banco" data-banco></div>' +
+        '<p class="banco-tip">Arrastra un bloque al hueco, o toca el bloque y luego el hueco. Toca un bloque colocado para devolverlo.</p>' +
+        '<div class="actions">' +
+          '<button class="btn primary" type="button" data-verificar>Verificar</button>' +
+          '<button class="btn ghost" type="button" data-sol>Ver solución</button>' +
+          '<button class="btn ghost" type="button" data-reset>Restaurar</button>' +
+        '</div>' +
+        '<div class="feedback" data-fb aria-live="polite"></div>' +
+        '<div class="solution hidden" data-solution>' +
+          '<div class="label">Solución completa</div>' +
+          '<pre class="code" data-solpre></pre>' +
+          '<ul class="notes">' + a.notas.map(n => "<li>" + n + "</li>").join("") + '</ul>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  const codigo = art.querySelector("[data-codigo]");
+  const banco = art.querySelector("[data-banco]");
+  const fb = art.querySelector("[data-fb]");
+  const solPre = art.querySelector("[data-solpre]");
+  const solBox = art.querySelector("[data-solution]");
+  const estadoChip = art.querySelector("[data-status]");
+  const lista = art.querySelector("[data-checks]");
+
+  codigo.innerHTML = filasModelo.map(function(f, i){
+    return f.slot
+      ? '<div class="slot" data-slot="' + i + '" role="button" tabindex="0" aria-label="' +
+          (esOrden ? "Línea " + f.n : "Hueco " + f.n) + ' vacío"><span class="slot-num">' +
+          (esOrden ? "línea " + f.n : "hueco " + f.n) + '</span></div>'
+      : '<div class="fila">' + escaparHtml(f.texto) + '</div>';
+  }).join("");
+
+  const solucionTexto = esOrden
+    ? a.lineas.join("\n")
+    : a.filas.map(f => typeof f === "string" ? f : f.gap).join("\n");
+  resaltarEn(solPre, solucionTexto);
+
+  const slots = [...art.querySelectorAll("[data-slot]")];
+  const puestos = new Array(filasModelo.length).fill(null);
+  let seleccionado = null;
+  let ordenInicial = bloques.map(b => b.id);
+
+  function barajar(){
+    for (let i = ordenInicial.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [ordenInicial[i], ordenInicial[j]] = [ordenInicial[j], ordenInicial[i]];
+    }
+  }
+  barajar();
+
+  function pintarEstado(){
+    if (estado.armados[a.id]) {
+      estadoChip.textContent = "Completado";
+      estadoChip.classList.add("done");
+    } else {
+      estadoChip.textContent = "Pendiente";
+      estadoChip.classList.remove("done");
+    }
+  }
+
+  function pintarBanco(){
+    const usados = new Set(puestos.filter(Boolean));
+    const libres = ordenInicial.filter(id => !usados.has(id));
+    banco.innerHTML = "";
+    if (!libres.length) {
+      banco.innerHTML = '<div class="vacio">No quedan bloques: están todos colocados.</div>';
+      return;
+    }
+    libres.forEach(function(id){
+      const el = document.createElement("div");
+      el.className = "bloque" + (seleccionado === id ? " sel" : "");
+      el.draggable = true;
+      el.tabIndex = 0;
+      el.setAttribute("role", "button");
+      el.dataset.bloque = id;
+      el.textContent = porId[id].texto.trim();
+      el.addEventListener("dragstart", function(e){
+        e.dataTransfer.setData("text/plain", id);
+        e.dataTransfer.effectAllowed = "move";
+        el.classList.add("arrastrando");
+      });
+      el.addEventListener("dragend", () => el.classList.remove("arrastrando"));
+      el.addEventListener("click", function(){
+        seleccionado = seleccionado === id ? null : id;
+        pintarBanco();
+      });
+      el.addEventListener("keydown", function(e){
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); el.click(); }
+      });
+      banco.appendChild(el);
+    });
+  }
+
+  function pintarSlots(){
+    slots.forEach(function(slot){
+      const idx = Number(slot.dataset.slot);
+      const id = puestos[idx];
+      slot.classList.remove("ok", "no", "over");
+      slot.classList.toggle("filled", !!id);
+      slot.innerHTML = id
+        ? escaparHtml(porId[id].texto)
+        : '<span class="slot-num">' + (esOrden ? "línea " + (idx + 1) : "hueco") + '</span>';
+    });
+  }
+
+  function limpiarMensajes(){
+    fb.className = "feedback";
+    fb.innerHTML = "";
+    lista.innerHTML = "";
+  }
+
+  function quitarCompletado(){
+    if (estado.armados[a.id]) {
+      delete estado.armados[a.id];
+      guardarEstado();
+      actualizarProgreso();
+      pintarEstado();
+    }
+  }
+
+  function pintar(){
+    pintarSlots();
+    pintarBanco();
+  }
+
+  function colocar(fila, id){
+    const anterior = puestos[fila];
+    const otra = puestos.indexOf(id);
+    if (otra !== -1) puestos[otra] = null;
+    puestos[fila] = id;
+    if (anterior && otra !== -1 && anterior !== id) puestos[otra] = anterior;
+    seleccionado = null;
+    limpiarMensajes();
+    quitarCompletado();
+    pintar();
+  }
+
+  function devolver(fila){
+    puestos[fila] = null;
+    limpiarMensajes();
+    quitarCompletado();
+    pintar();
+  }
+
+  slots.forEach(function(slot){
+    const idx = Number(slot.dataset.slot);
+    slot.addEventListener("click", function(){
+      if (seleccionado) colocar(idx, seleccionado);
+      else if (puestos[idx]) devolver(idx);
+    });
+    slot.addEventListener("keydown", function(e){
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); slot.click(); }
+    });
+    slot.addEventListener("dragover", function(e){
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      slot.classList.add("over");
+    });
+    slot.addEventListener("dragleave", () => slot.classList.remove("over"));
+    slot.addEventListener("drop", function(e){
+      e.preventDefault();
+      slot.classList.remove("over");
+      const id = e.dataTransfer.getData("text/plain");
+      if (id && porId[id]) colocar(idx, id);
+    });
+  });
+
+  function verificar(silencioso){
+    const vacios = slots.filter(s => !puestos[Number(s.dataset.slot)]).length;
+    slots.forEach(s => s.classList.remove("ok", "no"));
+
+    if (vacios) {
+      if (!silencioso) {
+        fb.className = "feedback show bad";
+        fb.innerHTML = "<strong>Faltan " + vacios + " bloques.</strong> Coloca todos los bloques antes de verificar.";
+      }
+      quitarCompletado();
+      return false;
+    }
+
+    let aciertos = 0;
+    const resultados = slots.map(function(slot){
+      const idx = Number(slot.dataset.slot);
+      const ok = normalizarLinea(porId[puestos[idx]].texto) === normalizarLinea(filasModelo[idx].texto);
+      slot.classList.add(ok ? "ok" : "no");
+      if (ok) aciertos++;
+      return { idx, ok };
+    });
+
+    lista.innerHTML = resultados.map(function(r){
+      const etiqueta = esOrden ? "Línea " + filasModelo[r.idx].n : "Hueco " + filasModelo[r.idx].n;
+      return '<li class="' + (r.ok ? "ok" : "no") + '">' +
+        '<span class="mark">' + (r.ok ? "✓" : "✗") + '</span>' +
+        '<div>' + etiqueta + (r.ok ? " en su lugar" : " con el bloque equivocado") + '</div>' +
+      '</li>';
+    }).join("");
+
+    if (aciertos === slots.length) {
+      if (!silencioso) {
+        fb.className = "feedback show ok";
+        fb.innerHTML = "<strong>Correcto.</strong> Los " + slots.length + " bloques están en su lugar. Abre la solución para comparar el programa completo y leer por qué cada pieza va ahí.";
+      }
+      estado.armados[a.id] = { ok: true, puestos: puestos.slice() };
+      guardarEstado();
+      actualizarProgreso();
+      pintarEstado();
+      return true;
+    }
+
+    if (!silencioso) {
+      fb.className = "feedback show bad";
+      fb.innerHTML = "<strong>" + aciertos + " de " + slots.length + " bloques en su lugar.</strong> Los marcados con ✗ están mal: muévelos a otro hueco y verifica de nuevo.";
+    }
+    quitarCompletado();
+    return false;
+  }
+
+  art.querySelector("[data-verificar]").addEventListener("click", () => verificar(false));
+
+  art.querySelector("[data-sol]").addEventListener("click", function(){
+    const oculto = solBox.classList.toggle("hidden");
+    this.textContent = oculto ? "Ver solución" : "Ocultar solución";
+  });
+
+  art.querySelector("[data-reset]").addEventListener("click", function(){
+    puestos.fill(null);
+    seleccionado = null;
+    barajar();
+    limpiarMensajes();
+    quitarCompletado();
+    pintar();
+    solBox.classList.add("hidden");
+    art.querySelector("[data-sol]").textContent = "Ver solución";
+  });
+
+  art.__cargarGuardado = function(){
+    const guardado = estado.armados[a.id];
+    if (!guardado || !Array.isArray(guardado.puestos)) return;
+    if (guardado.puestos.length !== puestos.length) return;
+    let valido = true;
+    guardado.puestos.forEach(function(id, i){
+      if (id && !porId[id]) valido = false;
+      if (id && !filasModelo[i].slot) valido = false;
+      if (valido) puestos[i] = id || null;
+    });
+    if (!valido) { puestos.fill(null); return; }
+    pintar();
+    verificar(true);
+  };
+
+  pintarEstado();
+  pintar();
+  return art;
+}
+
+const contArmar = document.getElementById("tasks-armar");
+ARMADOS.forEach(a => contArmar.appendChild(crearArmado(a)));
+
+function actualizarProgreso(){
+  const tareasHechas = TODAS.filter(t => estado.tareas[t.id]).length;
+  const armadosHechos = ARMADOS.filter(a => estado.armados[a.id]).length;
+  const total = TODAS.length + ARMADOS.length;
+  const hechas = tareasHechas + armadosHechos;
+  document.getElementById("barFill").style.width = (hechas / total * 100) + "%";
+  document.getElementById("doneLabel").textContent = hechas + " / " + total + " retos";
+}
+
+/* ============================================================
+   FLASHCARDS
+   ============================================================ */
+const FLASHCARDS = [
+  { cat: "Archivos", q: "¿Qué namespace necesitas para trabajar con archivos?", a: "<code>System.IO</code>. Sin <code>using System.IO;</code> no existen <code>File</code>, <code>Directory</code> ni <code>Path</code>." },
+  { cat: "Archivos", q: "¿Directory.CreateDirectory falla si la carpeta ya existe?", a: "No. Es idempotente: si ya existe, no hace nada y no lanza error." },
+  { cat: "Archivos", q: "¿Cuál es la diferencia entre WriteAllText y AppendAllText?", a: "<code>WriteAllText</code> reemplaza todo el contenido del archivo. <code>AppendAllText</code> agrega al final sin borrar lo anterior." },
+  { cat: "Archivos", q: "¿Qué devuelve File.ReadAllLines?", a: "Un <code>string[]</code>: una posición por línea, sin los saltos de línea." },
+  { cat: "Archivos", q: "¿Y qué devuelve File.ReadAllText?", a: "Un solo <code>string</code> con todo el contenido, incluidos los saltos de línea." },
+  { cat: "Archivos", q: "¿Qué pasa si lees con ReadAllLines un archivo que no existe?", a: "<code>FileNotFoundException</code>. Por eso se inicializa el archivo vacío al arrancar: <code>if (!File.Exists(archivo)) File.WriteAllText(archivo, \"\");</code>" },
+  { cat: "Archivos", q: "¿Qué hace Path.Combine?", a: "Une la carpeta y el nombre del archivo con el separador correcto. Evita el bug de <code>\"C:\\Base_datos\" + \"datos.txt\"</code>, que produce una ruta distinta de la esperada." },
+  { cat: "Archivos", q: "¿Qué excepción lanza WriteAllText si la carpeta no existe?", a: "<code>DirectoryNotFoundException</code>. <code>WriteAllText</code> crea el archivo, pero no la carpeta que lo contiene." },
+  { cat: "Formato", q: "¿Cuál es el formato más robusto para guardar registros?", a: "Una línea por registro con separador: <code>vendedor;producto;monto</code>. Una línea = un registro completo." },
+  { cat: "Formato", q: "¿Qué hace linea.Split(';')?", a: "Corta el texto en un arreglo de campos: <code>\"Ana;Cuaderno;4500\"</code> pasa a <code>[\"Ana\", \"Cuaderno\", \"4500\"]</code>." },
+  { cat: "Formato", q: "¿Por qué es frágil guardar un registro como bloque de líneas?", a: "Depende de contar líneas (<code>i-1</code>, <code>i+1</code>, <code>i+3</code>). Si agregas un campo o se pierde una línea en blanco, los índices se corren y puede lanzar <code>IndexOutOfRangeException</code>." },
+  { cat: "Formato", q: "¿Cómo conviertes datos[2] (texto) a número?", a: "Con <code>double.Parse(datos[2])</code> o, mejor, <code>double.TryParse(datos[2], out monto)</code>." },
+  { cat: "Entrada", q: "¿Cuál es la diferencia entre Parse y TryParse?", a: "<code>Parse</code> lanza excepción si el texto no es numérico; <code>TryParse</code> devuelve <code>false</code> sin lanzarla y deja el programa vivo." },
+  { cat: "Entrada", q: "¿Qué hace out en int.TryParse(texto, out numero)?", a: "Entrega el resultado convertido dentro de la variable <code>numero</code>; el método devuelve <code>true</code> o <code>false</code> según si pudo convertir." },
+  { cat: "Menú", q: "¿Por qué el menú usa while y el registro repetido usa do-while?", a: "El registro debe ocurrir al menos una vez; el menú puede no ejecutarse si el usuario ya quiere salir. <code>do-while</code> ejecuta primero y pregunta después." },
+  { cat: "POO", q: "¿Cuál es la diferencia entre clase y objeto?", a: "La clase es el molde; el objeto es lo que se crea con <code>new</code> a partir de ese molde." },
+  { cat: "POO", q: "¿Qué garantiza el constructor?", a: "Que el objeto nace con todos sus datos asignados. Sin constructor, el objeto podría quedar a medio llenar." },
+  { cat: "POO", q: "¿Qué significa this.Nombre = nombre;?", a: "Asigna al atributo <code>Nombre</code> del objeto (izquierda) el valor del parámetro <code>nombre</code> (derecha)." },
+  { cat: "POO", q: "Después de new Estudiante[5], ¿hay cinco estudiantes?", a: "No: hay cinco casillas en <code>null</code>. Cada estudiante se crea con <code>new Estudiante(...)</code> dentro del <code>for</code>." },
+  { cat: "POO", q: "¿Dónde va una regla como «no prestar si no está disponible»?", a: "Dentro del método del objeto (<code>Prestar</code>). El estado y su regla viven juntos; el <code>Main</code> solo muestra el resultado." },
+  { cat: "Errores", q: "¿Qué excepción aparece al acceder a datos[3] cuando hay 3 campos?", a: "<code>IndexOutOfRangeException</code>: los índices válidos son 0, 1 y 2. Verifica <code>datos.Length</code> antes de usar." },
+  { cat: "Síntesis", q: "Las cuatro operaciones de la unidad, en orden", a: "Escribir: <code>AppendAllText</code>. Leer: <code>ReadAllLines</code>. Cortar: <code>Split</code>. Reconstruir: <code>new</code>." }
+];
+
+let fcOrden = FLASHCARDS.map((_, i) => i);
+let fcIndice = 0;
+let fcGirada = false;
+
+const fcCard = document.getElementById("fcCard");
+const fcQ = document.getElementById("fcQ");
+const fcA = document.getElementById("fcA");
+const fcCat = document.getElementById("fcCat");
+const fcCounter = document.getElementById("fcCounter");
+const fcSeen = document.getElementById("fcSeen");
+
+function tarjetaActual(){ return FLASHCARDS[fcOrden[fcIndice]]; }
+
+function pintarTarjeta(){
+  const c = tarjetaActual();
+  fcCard.classList.remove("flipped");
+  fcGirada = false;
+  fcCat.textContent = c.cat;
+  fcQ.textContent = c.q;
+  fcA.innerHTML = c.a;
+  fcCounter.textContent = (fcIndice + 1) + " / " + FLASHCARDS.length;
+  fcSeen.textContent = "Vistas: " + estado.tarjetas.length + " / " + FLASHCARDS.length;
+}
+
+function marcarVista(){
+  const idx = fcOrden[fcIndice];
+  if (!estado.tarjetas.includes(idx)) {
+    estado.tarjetas.push(idx);
+    guardarEstado();
+    fcSeen.textContent = "Vistas: " + estado.tarjetas.length + " / " + FLASHCARDS.length;
+  }
+}
+
+function girar(){
+  fcCard.classList.toggle("flipped");
+  fcGirada = fcCard.classList.contains("flipped");
+  if (fcGirada) marcarVista();
+}
+
+fcCard.addEventListener("click", girar);
+fcCard.addEventListener("keydown", function(e){
+  if (e.key === " " || e.key === "Enter") { e.preventDefault(); girar(); }
+});
+
+document.getElementById("fcFlip").addEventListener("click", girar);
+document.getElementById("fcPrev").addEventListener("click", function(){
+  fcIndice = (fcIndice - 1 + FLASHCARDS.length) % FLASHCARDS.length;
+  pintarTarjeta();
+});
+document.getElementById("fcNext").addEventListener("click", function(){
+  fcIndice = (fcIndice + 1) % FLASHCARDS.length;
+  pintarTarjeta();
+});
+document.getElementById("fcShuffle").addEventListener("click", function(){
+  for (let i = fcOrden.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [fcOrden[i], fcOrden[j]] = [fcOrden[j], fcOrden[i]];
+  }
+  fcIndice = 0;
+  pintarTarjeta();
+});
+
+document.addEventListener("keydown", function(e){
+  const sec = document.getElementById("flashcards");
+  const r = sec.getBoundingClientRect();
+  const visible = r.top < window.innerHeight && r.bottom > 0;
+  const activo = document.activeElement;
+  if (!visible || (activo && (activo.tagName === "TEXTAREA" || activo.tagName === "INPUT"))) return;
+
+  if (e.key === "ArrowRight") { e.preventDefault(); document.getElementById("fcNext").click(); }
+  if (e.key === "ArrowLeft")  { e.preventDefault(); document.getElementById("fcPrev").click(); }
+});
+
+/* ============================================================
+   QUIZ
+   ============================================================ */
+const QUIZ = [
+  { q: "¿Qué namespace aporta File, Directory y Path?", opciones: ["System", "System.IO", "System.Text", "System.Files"], correcta: 1, why: "Todo el manejo de archivos vive en System.IO. Sin ese using, esos nombres no existen para tu programa." },
+  { q: "¿Qué método agrega una línea al final sin borrar lo anterior?", opciones: ["File.WriteAllText", "File.AppendAllText", "File.ReadAllText", "File.Create"], correcta: 1, why: "AppendAllText añade al final y crea el archivo si no existe. WriteAllText reemplaza todo el contenido." },
+  { q: "¿Qué devuelve File.ReadAllLines(\"x.txt\")?", opciones: ["Un string con todo el contenido", "Un string[] con una entrada por línea", "Una List<string>", "Un int con el número de líneas"], correcta: 1, why: "Devuelve un arreglo de líneas, sin los saltos de línea. Es la herramienta natural para archivos de registros." },
+  { q: "Si la carpeta destino no existe, File.WriteAllText lanza…", opciones: ["FileNotFoundException", "NullReferenceException", "DirectoryNotFoundException", "No lanza nada: crea la carpeta"], correcta: 2, why: "WriteAllText crea el archivo, pero no la carpeta. Por eso se llama primero a Directory.CreateDirectory." },
+  { q: "¿Cómo obtienes el vendedor de la línea \"Ana;Cuaderno;4500\"?", opciones: ["linea.Split(';')[0]", "linea[0]", "linea.Substring(0, 3)", "linea.Split(',')[0]"], correcta: 0, why: "Split(';') separa por el separador correcto y el índice 0 corresponde al vendedor." },
+  { q: "¿Cuál es la diferencia clave entre Parse y TryParse?", opciones: ["TryParse es más rápido", "Parse lanza excepción si falla; TryParse devuelve false sin lanzarla", "Parse solo funciona con enteros", "No hay diferencia práctica"], correcta: 1, why: "Una excepción no controlada termina el programa. TryParse te permite volver a pedir el dato." },
+  { q: "En int.TryParse(texto, out numero), ¿qué hace out?", opciones: ["Devuelve el texto original", "Entrega el resultado convertido en la variable numero", "Indica que el método puede fallar", "Es opcional y no hace nada"], correcta: 1, why: "El método devuelve true/false y usa out para entregar el número convertido, porque un método solo puede retornar un valor." },
+  { q: "Después de Estudiante[] lista = new Estudiante[5];, ¿qué contiene cada casilla?", opciones: ["Un estudiante con datos vacíos", "null", "Un estudiante con valores en 0", "Nada: el arreglo no se crea"], correcta: 1, why: "El arreglo se crea con cinco casillas vacías. Los objetos nacen con new Estudiante(...) dentro del for." },
+  { q: "En el constructor, this.Nombre = nombre; significa…", opciones: ["Comparar dos nombres", "Asignar el parámetro al atributo del objeto", "Crear un atributo nuevo", "Llamar a un método"], correcta: 1, why: "this.Nombre es el atributo del objeto; nombre es el parámetro que llegó al constructor." },
+  { q: "El enunciado dice: «si el equipo ya está no disponible, informar que no se puede prestar». ¿Dónde va esa regla?", opciones: ["En el Main, antes de llamar a Prestar", "Dentro del método Prestar del objeto Equipo", "En un comentario del código", "En el constructor"], correcta: 1, why: "El estado y la regla que lo cambia viven juntos. Así nadie puede marcar un equipo como prestado sin pasar por la validación." },
+  { q: "Para buscar un vendedor cuando cada línea es \"vendedor;producto;monto\", lo correcto es…", opciones: ["Comparar la línea completa con el nombre", "Usar Split(';') y comparar datos[0]", "Comparar el largo de la línea", "Usar ReadAllText y buscar el nombre con Contains"], correcta: 1, why: "La línea completa nunca es igual al nombre. Hay que aislar el campo y comparar ese campo." },
+  { q: "¿Para qué se usa File.WriteAllText(archivo, \"\")?", opciones: ["Para borrar el archivo", "Para crear o inicializar el archivo vacío en el primer arranque", "Para leer el archivo", "Para agregar una línea vacía"], correcta: 1, why: "Así el archivo existe desde el inicio y ReadAllLines no lanza FileNotFoundException en la primera ejecución." },
+  { q: "¿Qué excepción aparece si una línea tiene 3 campos y accedes a datos[3]?", opciones: ["FormatException", "IndexOutOfRangeException", "NullReferenceException", "DirectoryNotFoundException"], correcta: 1, why: "Con 3 campos los índices válidos son 0, 1 y 2. Por eso se valida datos.Length antes de usar posiciones." }
+];
+
+const QUIZ2 = [
+  { q: "En new Estudiante(\"1\", \"Ana\", 6.5, 5.8, 7.0), ¿qué relación hay entre argumentos y parámetros?", opciones: ["Pueden ir en cualquier orden", "Deben coincidir en cantidad, orden y tipo", "Solo importa la cantidad", "C# convierte e infiere lo que falte"], correcta: 1, why: "El constructor recibe cinco parámetros; los argumentos se asignan en ese mismo orden. Un valor en la posición equivocada compila o falla, pero el objeto queda mal armado." },
+  { q: "¿Por qué conviene que CalcularPromedio() viva dentro de la clase?", opciones: ["Porque usa los datos del objeto y oculta el cálculo", "Porque el Main no admite cálculos", "Para que el programa ocupe menos líneas", "Porque Console solo funciona dentro de clases"], correcta: 0, why: "El promedio depende de las notas del propio estudiante. Al dejarlo en la clase, el Main no necesita saber cómo se calcula y nadie puede duplicar la fórmula de forma distinta." },
+  { q: "¿Para qué sirve File.Exists(archivo) antes de leer?", opciones: ["Lanza una excepción si no existe", "Consulta si existe sin lanzar excepción", "Crea el archivo si falta", "Borra el archivo vacío"], correcta: 1, why: "Exists devuelve true o false. Si lo omites, ReadAllLines lanza FileNotFoundException cuando el archivo todavía no se ha creado." },
+  { q: "Después de string[] lineas = File.ReadAllLines(archivo);, la cantidad de registros se obtiene con…", opciones: ["lineas.Count", "lineas.Length", "lineas.Size", "File.Count(archivo)"], correcta: 1, why: "ReadAllLines devuelve un arreglo, y un arreglo conoce su tamaño con Length. Count se usa en List<T>." },
+  { q: "Si agregas un cuarto campo al formato vendedor;producto;monto, ¿qué hay que revisar en el programa?", opciones: ["Nada: el código sigue funcionando igual", "Cada Split e índice fijo, como datos[2]", "Solo el nombre del archivo", "Cambiar ReadAllLines por ReadAllText"], correcta: 1, why: "Los índices son posiciones: si insertas un campo en medio, datos[1] y datos[2] ya no son el producto y el monto. Hay que actualizar el formato completo." },
+  { q: "¿Por qué cada registro debe terminar con \\n antes del siguiente append?", opciones: ["Para que el archivo pese menos", "Para que el nuevo registro no se pegue al anterior", "Porque AppendAllText lo exige", "Para crear la carpeta"], correcta: 1, why: "Sin el salto, dos registros quedan en la misma línea y el Split mezcla campos de ambos. El salto es parte del formato del registro." },
+  { q: "En do { ... } while (respuesta.ToUpper() == \"S\");, ¿qué logra ToUpper()?", opciones: ["Comparar sin importar mayúsculas o minúsculas", "Eliminar los espacios", "Validar que sea una letra", "Convertir el texto a número"], correcta: 0, why: "Así «s» y «S» cuentan como la misma respuesta. Sin ToUpper, el usuario tendría que escribir exactamente la mayúscula esperada." },
+  { q: "¿Qué ocurre al ejecutar double.Parse(\"abc\")?", opciones: ["Devuelve 0", "Lanza FormatException", "Lanza NullReferenceException", "Imprime abc"], correcta: 1, why: "Parse exige un texto convertible. La alternativa segura es double.TryParse, que devuelve false y deja seguir el programa." },
+  { q: "Con Estudiante[] lista = new Estudiante[5];, si accedes a lista[0].Nombre antes de asignar lista[0], ocurre…", opciones: ["Devuelve un texto vacío", "NullReferenceException", "IndexOutOfRangeException", "Se crea el objeto automáticamente"], correcta: 1, why: "El arreglo nace lleno de null. Hay que crear cada objeto con new Estudiante(...) dentro del for antes de usarlo." },
+  { q: "Un menú con while y switch no reinicia opcion cuando TryParse falla. ¿Qué riesgo hay?", opciones: ["Ninguno: el switch lo ignora", "Repetir la acción anterior o entrar en un bucle", "Que el programa se cierre solo", "Que el switch lance una excepción"], correcta: 1, why: "La variable conserva el valor válido anterior, así que el switch vuelve a ejecutar esa opción. Se reinicia a 0 y se pide de nuevo." },
+  { q: "¿Cuándo conviene File.ReadAllText en lugar de ReadAllLines?", opciones: ["Cuando quieres todo el contenido como un solo string", "Cuando el archivo es enorme", "Cuando necesitas recorrer línea por línea", "Nunca: siempre es peor"], correcta: 0, why: "ReadAllText entrega un único texto con sus saltos incluidos. Sirve para mostrarlo o buscar con Contains, pero no para separar registros por línea." }
+];
+
+function crearQuiz(cfg){
+  const raiz = document.getElementById(cfg.montar);
+  raiz.innerHTML =
+    '<h3>' + cfg.titulo + ' <span class="quiz-badge">' + cfg.preguntas.length + ' preguntas</span></h3>' +
+    '<p class="quiz-sub">' + cfg.lead + '</p>' +
+    '<div class="panel">' +
+      '<div class="quiz-head">' +
+        '<span class="quiz-step" data-step></span>' +
+        '<span class="quiz-step" data-best></span>' +
+      '</div>' +
+      '<div class="quiz-q" data-q></div>' +
+      '<div data-opts></div>' +
+      '<div class="explain" data-explain></div>' +
+      '<div class="quiz-actions">' +
+        '<button class="btn primary" type="button" data-check>Comprobar</button>' +
+        '<button class="btn ghost hidden" type="button" data-next>Siguiente →</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="panel hidden" data-result></div>';
+
+  const quizPanel = raiz.querySelector(".panel");
+  const quizResult = raiz.querySelector("[data-result]");
+  const quizStep = raiz.querySelector("[data-step]");
+  const quizQ = raiz.querySelector("[data-q]");
+  const quizOpts = raiz.querySelector("[data-opts]");
+  const quizExplain = raiz.querySelector("[data-explain]");
+  const quizCheck = raiz.querySelector("[data-check]");
+  const quizNext = raiz.querySelector("[data-next]");
+  const quizBest = raiz.querySelector("[data-best]");
+  const DATOS = cfg.preguntas;
+  const LETRAS = ["A", "B", "C", "D"];
+
+  let qi = 0;
+  let seleccion = null;
+  let bloqueado = false;
+  let puntaje = 0;
+  let falladas = [];
+
+  function pintarMejor(){
+    const mejor = estado[cfg.clave] || 0;
+    quizBest.textContent = mejor > 0 ? "Mejor: " + mejor + "%" : "Mejor: —";
+  }
+
+function pintarPregunta(){
+  const p = DATOS[qi];
+  seleccion = null;
+  bloqueado = false;
+  quizStep.textContent = "Pregunta " + (qi + 1) + " de " + DATOS.length;
+  quizQ.textContent = p.q;
+  quizExplain.className = "explain";
+  quizExplain.innerHTML = "";
+  quizCheck.classList.remove("hidden");
+  quizCheck.disabled = false;
+  quizNext.classList.add("hidden");
+
+  quizOpts.innerHTML = "";
+  p.opciones.forEach(function(texto, i){
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "opt";
+    b.innerHTML = '<span class="letter">' + LETRAS[i] + '</span><span>' + escaparHtml(texto) + '</span>';
+    b.addEventListener("click", function(){
+      if (bloqueado) return;
+      seleccion = i;
+      [...quizOpts.children].forEach(o => o.classList.remove("sel"));
+      b.classList.add("sel");
+    });
+    quizOpts.appendChild(b);
+  });
+}
+
+quizCheck.addEventListener("click", function(){
+  if (bloqueado) return;
+  if (seleccion === null) {
+    quizExplain.className = "explain show bad";
+    quizExplain.innerHTML = "<strong>Elige una opción.</strong> Antes de comprobar, marca la alternativa que crees correcta.";
+    return;
+  }
+
+  bloqueado = true;
+  const p = DATOS[qi];
+  const opciones = [...quizOpts.children];
+
+  opciones.forEach(function(o, i){
+    o.disabled = true;
+    o.classList.remove("sel");
+    if (i === p.correcta) o.classList.add("correct");
+    if (i === seleccion && i !== p.correcta) o.classList.add("wrong");
+  });
+
+  if (seleccion === p.correcta) {
+    puntaje++;
+    quizExplain.className = "explain show ok";
+    quizExplain.innerHTML = "<strong>Correcto.</strong>" + p.why;
+  } else {
+    falladas.push({ pregunta: p.q, elegida: p.opciones[seleccion], correcta: p.opciones[p.correcta], why: p.why });
+    quizExplain.className = "explain show bad";
+    quizExplain.innerHTML = "<strong>No era esa.</strong>" + p.why;
+  }
+
+  quizCheck.classList.add("hidden");
+  quizNext.classList.remove("hidden");
+  quizNext.textContent = (qi === DATOS.length - 1) ? "Ver resultado" : "Siguiente →";
+  quizNext.focus();
+});
+
+quizNext.addEventListener("click", function(){
+  if (qi < DATOS.length - 1) {
+    qi++;
+    pintarPregunta();
+    quizQ.scrollIntoView({ block: "center", behavior: "smooth" });
+  } else {
+    terminarQuiz();
+  }
+});
+
+function terminarQuiz(){
+  const porcentaje = Math.round(puntaje / DATOS.length * 100);
+
+  if (porcentaje > estado[cfg.clave]) {
+    estado[cfg.clave] = porcentaje;
+    guardarEstado();
+  }
+  pintarMejor();
+
+  let mensaje;
+  if (porcentaje >= 90) mensaje = "Dominas la unidad. Ahora el desafío es escribirlo de memoria en los retos.";
+  else if (porcentaje >= 70) mensaje = "Vas bien. Repasa las preguntas falladas y vuelve a intentarlo.";
+  else if (porcentaje >= 50) mensaje = "Hay bases, pero faltan detalles. Vuelve a la teoría de formato y de POO.";
+  else mensaje = "Conviene releer la teoría con calma antes de seguir con los retos.";
+
+  quizPanel.classList.add("hidden");
+  quizResult.classList.remove("hidden");
+
+  const revision = falladas.length
+    ? '<div class="review"><h4 style="margin:0 0 10px">Para repasar</h4>' +
+      falladas.map(f =>
+        '<div class="review-item">' +
+          '<p class="rq">' + escaparHtml(f.pregunta) + '</p>' +
+          '<p class="rw">Tu respuesta: ' + escaparHtml(f.elegida) + '</p>' +
+          '<p class="ra">Correcta: ' + escaparHtml(f.correcta) + '</p>' +
+          '<p class="why">' + f.why + '</p>' +
+        '</div>'
+      ).join("") + '</div>'
+    : '<p style="text-align:center;color:var(--ok);font-weight:700">Sin errores. Impecable.</p>';
+
+  quizResult.innerHTML =
+    '<div class="result">' +
+      '<div class="score">' + puntaje + '<small> / ' + DATOS.length + '</small></div>' +
+      '<p><strong>' + porcentaje + '%</strong> · Mejor resultado guardado: ' + estado[cfg.clave] + '%</p>' +
+      '<p>' + mensaje + '</p>' +
+    '</div>' +
+    '<div class="quiz-actions" style="justify-content:center">' +
+      '<button class="btn primary" type="button" data-retry>Reintentar</button>' +
+      '<button class="btn ghost" type="button" data-goto>' + cfg.destinoTexto + '</button>' +
+    '</div>' +
+    revision;
+
+  quizResult.querySelector("[data-retry]").addEventListener("click", function(){
+    reiniciar();
+    quizPanel.scrollIntoView({ block: "center", behavior: "smooth" });
+  });
+
+  quizResult.querySelector("[data-goto]").addEventListener("click", function(){
+    document.getElementById(cfg.destino).scrollIntoView({ behavior: "smooth" });
+  });
+
+  quizResult.scrollIntoView({ block: "center", behavior: "smooth" });
+}
+
+  function reiniciar(){
+    qi = 0; puntaje = 0; falladas = [];
+    seleccion = null;
+    bloqueado = false;
+    quizResult.classList.add("hidden");
+    quizPanel.classList.remove("hidden");
+    pintarPregunta();
+  }
+
+  pintarPregunta();
+  pintarMejor();
+
+  return { reiniciar: reiniciar, pintarMejor: pintarMejor };
+}
+
+const CONTROLES_QUIZ = [
+  crearQuiz({
+    montar: "quiz1",
+    titulo: "Ronda 1 · Archivos, formato y entrada",
+    lead: "Lo esencial de System.IO: qué método hace cada cosa, cómo se arma un registro y cómo se valida lo que escribe el usuario.",
+    clave: "quizMejor",
+    preguntas: QUIZ,
+    destino: "ejercicios",
+    destinoTexto: "Ir a los retos escritos"
+  }),
+  crearQuiz({
+    montar: "quiz2",
+    titulo: "Ronda 2 · POO, validación y errores",
+    lead: "Constructores, encapsulación, nulls, parseos y los errores que aparecen cuando el formato o el flujo se descuidan.",
+    clave: "quizMejor2",
+    preguntas: QUIZ2,
+    destino: "armar",
+    destinoTexto: "Ir a los retos de arrastre"
+  })
+];
+
+/* ============================================================
+   NAV / PROGRESO / INICIO
+   ============================================================ */
+const enlacesNav = [...document.querySelectorAll("#navLinks a")];
+const secciones = enlacesNav.map(a => document.querySelector(a.getAttribute("href")));
+
+if ("IntersectionObserver" in window) {
+  const observador = new IntersectionObserver(function(entradas){
+    entradas.forEach(function(entrada){
+      if (!entrada.isIntersecting) return;
+      const id = "#" + entrada.target.id;
+      enlacesNav.forEach(a => a.classList.toggle("active", a.getAttribute("href") === id));
+    });
+  }, { rootMargin: "-45% 0px -50% 0px" });
+  secciones.forEach(s => { if (s) observador.observe(s); });
+}
+
+document.getElementById("resetProgress").addEventListener("click", function(){
+  estado = { tareas: {}, armados: {}, quizMejor: 0, quizMejor2: 0, tarjetas: [] };
+  guardarEstado();
+  document.querySelectorAll("[data-status]").forEach(el => {
+    el.textContent = "Pendiente";
+    el.classList.remove("done");
+  });
+  actualizarProgreso();
+  CONTROLES_QUIZ.forEach(function(c){ c.reiniciar(); c.pintarMejor(); });
+  fcSeen.textContent = "Vistas: 0 / " + FLASHCARDS.length;
+  document.querySelectorAll(".solution").forEach(s => s.classList.add("hidden"));
+  document.querySelectorAll("[data-sol]").forEach(b => b.textContent = "Ver solución");
+  document.querySelectorAll(".feedback").forEach(f => { f.className = "feedback"; f.innerHTML = ""; });
+  document.querySelectorAll(".task, .armado").forEach(card => {
+    const btn = card.querySelector("[data-reset]");
+    if (btn) btn.click();
+  });
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+/* arranque */
+function ajustarAjusteEditor(){
+  const modo = window.innerWidth < 760 ? "soft" : "off";
+  document.querySelectorAll("[data-editor]").forEach(t => t.setAttribute("wrap", modo));
+}
+ajustarAjusteEditor();
+window.addEventListener("resize", ajustarAjusteEditor);
+
+document.querySelectorAll("pre[data-src]").forEach(function(pre){
+  resaltarEn(pre, SNIPPETS[pre.getAttribute("data-src")] || "");
+});
+ARMADOS.forEach(function(a){
+  const el = document.getElementById("armado-" + a.id);
+  if (el && el.__cargarGuardado) el.__cargarGuardado();
+});
+pintarTarjeta();
+actualizarProgreso();
+</script>
+</body>
+</html>
