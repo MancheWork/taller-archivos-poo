@@ -93,7 +93,7 @@
   details.hint summary{cursor:pointer;font-weight:600;color:#334155;font-size:14.5px}
   details.hint p{font-size:14.5px;margin:8px 0 0;color:#475569}
 
-  code{font-family:var(--mono);font-size:.9em;background:#f1f5f9;padding:2px 6px;border-radius:6px;color:#0f172a}
+  code{font-family:var(--mono);font-size:.9em;background:#f1f5f9;padding:2px 6px;border-radius:6px;color:#0f172a;overflow-wrap:anywhere}
 
   pre.code{background:var(--code-bg);color:#e2e8f0;border-radius:14px;padding:16px 18px;overflow:auto;font-family:var(--mono);font-size:13.5px;line-height:1.6;margin:14px 0;border:1px solid #1e293b;tab-size:4}
   .c-kw{color:#c084fc}
@@ -241,15 +241,66 @@
   .quiz-block .quiz-sub{color:var(--muted);font-size:14.5px;margin-bottom:14px}
   .quiz-badge{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;background:#eef2ff;color:#4338ca;border:1px solid #e0e7ff}
 
+  /* ---------- SIMULADOR ---------- */
+  .sim{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}
+  .sim-panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);min-width:0}
+  .sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;margin-bottom:6px}
+  .sim-grid label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px}
+  .sim-grid input{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-family:inherit;font-size:14px;color:var(--ink);background:#fff}
+  .sim-grid input:focus{outline:2px solid #a78bfa;outline-offset:1px}
+  .sim-file{background:var(--code-bg);border:1px solid #1e293b;border-radius:14px;padding:12px 0;min-height:190px;max-height:300px;overflow:auto;font-family:var(--mono);font-size:13px;line-height:1.7;color:#e2e8f0}
+  .sim-linea{display:flex;gap:12px;padding:1px 16px;white-space:pre-wrap;overflow-wrap:anywhere}
+  .sim-linea .ln{min-width:20px;text-align:right;color:#475569;user-select:none}
+  .sim-linea.hit{background:rgba(16,185,129,.18)}
+  .sim-linea.bad{background:rgba(248,113,113,.16)}
+  .sim-vacia{color:#64748b;font-style:italic}
+  .sim-count{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .sim-count span{font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:#f1f5f9;color:#475569}
+  .sim-log{margin-top:18px}
+  .sim-log ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+  .sim-log li{border-left:3px solid #c4b5fd;background:#fff;border-radius:0 10px 10px 0;padding:9px 13px;font-size:14px;color:#374151}
+  .sim-log li.ok{border-color:var(--ok);background:var(--ok-soft)}
+  .sim-log li.bad{border-color:var(--bad);background:var(--bad-soft)}
+  .sim-log code{background:rgba(15,23,42,.06)}
+
+  /* ---------- PARES DE ERRORES ---------- */
+  .pares{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}
+  .pares-col{min-width:0}
+  .pares-col h3{font-size:12.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px}
+  .par-card{display:block;width:100%;text-align:left;font-family:inherit;font-size:13.6px;line-height:1.5;color:#1f2937;background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 13px;margin-bottom:9px;cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s}
+  .par-card:hover{border-color:#c4b5fd}
+  .par-card:focus-visible{outline:2px solid #a78bfa;outline-offset:1px}
+  .par-card.sel{border-color:var(--brand);background:var(--brand-soft);box-shadow:0 0 0 2px #ddd6fe}
+  .par-card.matched{border-color:var(--ok-line);background:var(--ok-soft);color:#065f46;cursor:default;box-shadow:none}
+  .par-card.wrong{border-color:var(--bad-line);background:var(--bad-soft);color:#7f1d1d}
+  .par-tag{float:right;margin-left:8px;font-size:11px;font-weight:800;color:var(--ok);letter-spacing:.04em}
+  .pares-estado{font-size:13.5px;font-weight:700;color:var(--muted);margin-top:12px}
+
+  /* ---------- CHULETA ---------- */
+  .chuleta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}
+  .ch-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);min-width:0}
+  .ch-card h3{font-size:15.5px;margin-bottom:8px;color:var(--brand-dark)}
+  .ch-card p{font-size:13.5px;color:#374151;margin:0 0 8px}
+  .ch-card ul{padding-left:18px;margin:6px 0 0}
+  .ch-card li{font-size:13.4px;color:#374151;margin-bottom:5px}
+  .ch-card table{width:100%;border-collapse:collapse;font-size:13px}
+  .ch-card td code{overflow-wrap:anywhere;word-break:break-word}
+  .ch-card td{padding:5px 0;border-bottom:1px dashed #eef0f4;vertical-align:top}
+  .ch-card td:first-child{width:46%;padding-right:10px}
+  .ch-card pre.code{font-size:12px;padding:10px 12px;margin:8px 0 0;max-width:100%}
+
   @media (max-width:900px){
     .task-body{grid-template-columns:1fr}
     .armado-body{grid-template-columns:1fr}
     .fc{height:390px}
+    .sim{grid-template-columns:minmax(0,1fr)}
+    .pares{grid-template-columns:minmax(0,1fr)}
+    .chuleta{grid-template-columns:minmax(0,1fr)}
   }
   @media (max-width:640px){
     .hero{padding:46px 0 54px}
     section{padding:44px 0 6px}
-    .lesson,.task,.armado,#quiz .panel,#flashcards .panel{padding:20px 18px}
+    .lesson,.task,.armado,#quiz .panel,#flashcards .panel,.sim-panel{padding:20px 18px}
     .nav-progress{min-width:0}
     .bar{width:64px}
     .fc{height:420px}
@@ -257,6 +308,7 @@
     .foot{flex-direction:column;align-items:flex-start}
     .codigo-armado{max-height:460px}
     .banco{max-height:340px}
+    .sim-grid{grid-template-columns:1fr}
   }
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto}
@@ -264,8 +316,17 @@
     .bar span{transition:none}
   }
   @media print{
-    .nav,.hero{position:static}
+    .nav,.hero,footer,#teoria,#flashcards,#quiz,#ejercicios,#armar,#errores,#simulador,#errores-cs,.chuleta-actions{display:none!important}
     .task-body{grid-template-columns:1fr}
+    body{background:#fff}
+    .wrap{max-width:100%;padding:0}
+    #chuleta{padding:0}
+    #chuleta .kicker{display:none}
+    #chuleta h2{font-size:20px;margin-bottom:12px}
+    .chuleta{grid-template-columns:1fr 1fr;gap:10px}
+    .ch-card{box-shadow:none;break-inside:avoid;padding:12px 14px}
+    .ch-card pre.code{background:#fff;color:#111;border:1px solid #ddd}
+    a{color:inherit;text-decoration:none}
   }
 </style>
 </head>
@@ -284,6 +345,9 @@
       <span class="badge">5 retos escritos</span>
       <span class="badge">10 retos de arrastre</span>
       <span class="badge">3 errores por cazar</span>
+      <span class="badge">Simulador del archivo</span>
+      <span class="badge">6 errores de C#</span>
+      <span class="badge">Chuleta imprimible</span>
     </div>
     <p class="note">Todo el código de la guía está escrito en <strong>C#</strong> para .NET (el mismo lenguaje y la misma sintaxis de Visual Studio). Los retos se comprueban en el navegador: no se ejecuta C#, se verifican las reglas clave de tu código y se muestra la solución comentada. Nada se instala y nada se envía a internet.</p>
   </div>
@@ -298,6 +362,9 @@
       <a href="#ejercicios">Escribe el código</a>
       <a href="#armar">Arrastra el código</a>
       <a href="#errores">Caza el error</a>
+      <a href="#simulador">Simulador</a>
+      <a href="#errores-cs">Errores de C#</a>
+      <a href="#chuleta">Chuleta</a>
     </div>
     <div class="nav-progress">
       <div class="bar"><span id="barFill"></span></div>
@@ -660,6 +727,167 @@
   <h2>Tres programas que casi funcionan</h2>
   <p class="section-lead">Cada tarjeta trae código con un error real de la unidad. Léelo, encuentra la causa, corrígelo en el editor y pulsa Comprobar. No hay consola: la verificación te dice si el error desapareció de verdad y si mantuviste lo que ya estaba bien.</p>
   <div id="tasks-fix"></div>
+</section>
+
+<!-- ==================== SIMULADOR ==================== -->
+<section id="simulador">
+  <div class="kicker">07 · Simulador del archivo</div>
+  <h2>Mira cómo cambia ventas.txt por dentro</h2>
+  <p class="section-lead">Aquí el archivo es real, pero vive en esta página. Registra ventas y observa el contenido de <code>ventas.txt</code> y lo que hace cada método de <code>System.IO</code>. Prueba también los dos errores clásicos: una línea con campos de menos y un <code>WriteAllText</code> que borra todo.</p>
+  <div class="legend"><strong>Qué mirar:</strong> cada línea es un registro con tres campos separados por <code>;</code>. <code>AppendAllText</code> agrega al final; <code>WriteAllText</code> reemplaza el archivo completo. Al leer, el campo 0 es el vendedor, el 1 el producto y el 2 el monto.</div>
+
+  <div class="sim">
+    <div class="sim-panel">
+      <div class="label">Datos de la venta</div>
+      <div class="sim-grid">
+        <div><label for="simVendedor">Vendedor</label><input id="simVendedor" value="Ana" autocomplete="off"></div>
+        <div><label for="simProducto">Producto</label><input id="simProducto" value="Cuaderno" autocomplete="off"></div>
+        <div><label for="simMonto">Monto</label><input id="simMonto" value="4500" autocomplete="off" inputmode="decimal"></div>
+        <div><label for="simBuscar">Buscar vendedor</label><input id="simBuscar" value="Ana" autocomplete="off"></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="simRegistrar" type="button">Registrar venta</button>
+        <button class="btn ghost" id="simBuscarBtn" type="button">Buscar</button>
+        <button class="btn ghost" id="simTotal" type="button">Calcular total</button>
+        <button class="btn ghost" id="simCorrupta" type="button">Línea corrupta</button>
+        <button class="btn ghost" id="simWrite" type="button">WriteAllText</button>
+        <button class="btn ghost" id="simReset" type="button">Reiniciar archivo</button>
+      </div>
+    </div>
+    <div class="sim-panel">
+      <div class="label">Contenido de ventas.txt</div>
+      <div class="sim-file" id="simFile" aria-live="polite"></div>
+      <div class="sim-count" id="simCount"></div>
+    </div>
+  </div>
+
+  <div class="sim-log">
+    <div class="label">Qué hace el programa</div>
+    <ul id="simLog" aria-live="polite"></ul>
+  </div>
+</section>
+
+<!-- ==================== ERRORES DE C# ==================== -->
+<section id="errores-cs">
+  <div class="kicker">08 · Errores del compilador</div>
+  <h2>Empareja el mensaje de C# con su causa</h2>
+  <p class="section-lead">Cuando el compilador se queja, el mensaje parece jeroglífico. Toca un mensaje y después la causa que lo produce; si aciertas, la pareja se marca en verde. Cada mensaje corresponde a un error real de esta unidad.</p>
+  <div class="legend"><strong>Cómo se usa:</strong> primero el mensaje y luego la causa (o al revés). Si la pareja no coincide, ambas tarjetas se marcan en rojo y puedes volver a intentarlo. Usa «Ver solución» si te trabas.</div>
+
+  <div class="pares">
+    <div class="pares-col">
+      <h3>Mensaje del compilador</h3>
+      <div id="paresMsg"></div>
+    </div>
+    <div class="pares-col">
+      <h3>Causa en el código</h3>
+      <div id="paresCausa"></div>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="btn ghost" id="paresSol" type="button">Ver solución</button>
+    <button class="btn ghost" id="paresReset" type="button">Reiniciar</button>
+  </div>
+  <p class="pares-estado" id="paresEstado">0 / 6 parejas</p>
+</section>
+
+<!-- ==================== CHULETA ==================== -->
+<section id="chuleta">
+  <div class="kicker">09 · Chuleta</div>
+  <h2>Todo lo esencial en una página</h2>
+  <p class="section-lead">Para repasar sin pantalla: las herramientas de <code>System.IO</code>, el formato del registro, el menú, la clase mínima y los errores que más aparecen en C#. El botón imprime solo esta sección o la guarda como PDF.</p>
+  <div class="actions chuleta-actions">
+    <button class="btn primary" id="chuletaImprimir" type="button">Imprimir o guardar PDF</button>
+  </div>
+
+  <div class="chuleta">
+    <div class="ch-card">
+      <h3>Las seis herramientas de System.IO</h3>
+      <table>
+        <tr><td><code>Directory.CreateDirectory</code></td><td>Crea la carpeta si no existe; si existe, no falla.</td></tr>
+        <tr><td><code>File.Exists</code></td><td>Pregunta si el archivo ya está antes de inicializarlo.</td></tr>
+        <tr><td><code>File.WriteAllText</code></td><td>Escribe desde cero y <strong>borra</strong> lo anterior.</td></tr>
+        <tr><td><code>File.AppendAllText</code></td><td>Agrega al final; es el que se usa para registrar.</td></tr>
+        <tr><td><code>File.ReadAllText</code></td><td>Todo el contenido en un solo <code>string</code>.</td></tr>
+        <tr><td><code>File.ReadAllLines</code></td><td>Un <code>string[]</code>, una línea por posición.</td></tr>
+      </table>
+      <p><code>Path.Combine(carpeta, archivo)</code> arma la ruta con el separador correcto.</p>
+    </div>
+
+    <div class="ch-card">
+      <h3>El registro y su formato</h3>
+      <p>Una línea por registro, campos separados por <code>;</code> y <code>\n</code> al final.</p>
+      <pre class="code" data-src="chRegistro"></pre>
+      <ul>
+        <li>El campo 0 es el primero: <code>datos[0]</code>.</li>
+        <li>El último índice válido es <code>Length - 1</code>.</li>
+        <li>Compara un campo, no la línea completa.</li>
+      </ul>
+    </div>
+
+    <div class="ch-card">
+      <h3>El encendido estándar</h3>
+      <pre class="code" data-src="chEncendido"></pre>
+      <ul>
+        <li>La carpeta antes que el archivo.</li>
+        <li>El archivo vacío antes del primer registro.</li>
+        <li><code>AppendAllText</code> crea el archivo si no existe.</li>
+      </ul>
+    </div>
+
+    <div class="ch-card">
+      <h3>Menú y validación</h3>
+      <pre class="code" data-src="chMenu"></pre>
+      <ul>
+        <li><code>TryParse</code> no lanza excepción: devuelve <code>false</code>.</li>
+        <li>Si falla, <code>opcion = 0</code> y <code>continue</code>.</li>
+        <li><code>respuesta.ToUpper() == "S"</code> para seguir.</li>
+      </ul>
+    </div>
+
+    <div class="ch-card">
+      <h3>Clase mínima con regla</h3>
+      <pre class="code" data-src="chPoo"></pre>
+    </div>
+
+    <div class="ch-card">
+      <h3>La receta de siete pasos</h3>
+      <ul>
+        <li>Elegir la carpeta y el archivo.</li>
+        <li>Crear la carpeta y el archivo vacío.</li>
+        <li>Definir el formato de cada registro.</li>
+        <li>Registrar con <code>AppendAllText</code>.</li>
+        <li>Leer con <code>ReadAllLines</code> y cortar con <code>Split(';')</code>.</li>
+        <li>Convertir y validar con <code>TryParse</code>.</li>
+        <li>Ofrecer un menú que repita hasta salir.</li>
+      </ul>
+    </div>
+
+    <div class="ch-card">
+      <h3>Errores que más cuestan</h3>
+      <ul>
+        <li><code>WriteAllText</code> para registrar: borra todo.</li>
+        <li><code>Parse</code> con datos del usuario: puede terminar el programa.</li>
+        <li><code>Split(',')</code> cuando el separador es <code>;</code>.</li>
+        <li><code>i &lt;= Length</code>: se sale del arreglo.</li>
+        <li>Comparar <code>lineas[i]</code> con el nombre en vez de <code>datos[0]</code>.</li>
+        <li>Olvidar <code>using System.IO;</code>.</li>
+        <li>Olvidar <code>this.</code> en el constructor.</li>
+      </ul>
+    </div>
+
+    <div class="ch-card">
+      <h3>Mensajes del compilador</h3>
+      <table>
+        <tr><td><code>CS1002</code></td><td>Falta un <code>;</code>.</td></tr>
+        <tr><td><code>CS0161</code></td><td>Hay un camino del método sin <code>return</code>.</td></tr>
+        <tr><td><code>CS0029</code></td><td>Asignas texto a un número: falta <code>double.Parse</code>.</td></tr>
+        <tr><td><code>CS0246</code></td><td>Falta el <code>using</code> del tipo.</td></tr>
+        <tr><td><code>CS7036</code></td><td>Llamas al constructor sin sus argumentos.</td></tr>
+        <tr><td><code>CS0165</code></td><td>Usas una variable sin asignarla.</td></tr>
+      </table>
+    </div>
+  </div>
 </section>
 
 </main>
@@ -1392,6 +1620,49 @@ class Program
     static string[] lineaSplit(string linea)
     {
         return linea.Split(';');
+    }
+}`,
+  chRegistro: String.raw`Ana;Cuaderno;4500\n
+Luis;Mochila;7200\n
+
+string[] datos = linea.Split(';');
+// datos[0] = "Ana"
+// datos[1] = "Cuaderno"
+// datos[2] = "4500"`,
+  chEncendido: String.raw`Directory.CreateDirectory(carpeta);
+if (!File.Exists(archivo)) File.WriteAllText(archivo, "");
+
+File.AppendAllText(archivo, vendedor + ";" + producto + ";" + monto + "\n");`,
+  chMenu: String.raw`int opcion = 0;
+while (opcion != 3)
+{
+    if (!int.TryParse(Console.ReadLine(), out opcion))
+    {
+        opcion = 0;
+        continue;
+    }
+    switch (opcion)
+    {
+        case 1: RegistrarVenta(); break;
+        case 2: MostrarVentas(); break;
+    }
+}`,
+  chPoo: String.raw`public class Equipo
+{
+    public string Nombre;
+    public bool Disponible;
+
+    public Equipo(string nombre)
+    {
+        this.Nombre = nombre;
+        Disponible = true;
+    }
+
+    public bool Prestar()
+    {
+        if (!Disponible) return false;
+        Disponible = false;
+        return true;
     }
 }`
 };
@@ -2816,6 +3087,306 @@ const CONTROLES_QUIZ = [
     destinoTexto: "Ir a los retos de arrastre"
   })
 ];
+
+/* ============================================================
+   SIMULADOR DEL ARCHIVO
+   ============================================================ */
+(function(){
+  const elFile = document.getElementById("simFile");
+  if (!elFile) return;
+  const elCount = document.getElementById("simCount");
+  const elLog = document.getElementById("simLog");
+  const inVendedor = document.getElementById("simVendedor");
+  const inProducto = document.getElementById("simProducto");
+  const inMonto = document.getElementById("simMonto");
+  const inBuscar = document.getElementById("simBuscar");
+
+  let lineas = ["Ana;Cuaderno;4500"];
+  let marcas = {};
+
+  function log(msg, tipo){
+    const li = document.createElement("li");
+    if (tipo) li.className = tipo;
+    li.innerHTML = msg;
+    elLog.prepend(li);
+    while (elLog.children.length > 5) elLog.lastElementChild.remove();
+  }
+
+  function leerMonto(texto){
+    const limpio = String(texto).trim();
+    if (limpio === "") return null;
+    const n = Number(limpio.replace(",", "."));
+    return isFinite(n) ? n : null;
+  }
+
+  function render(){
+    elFile.innerHTML = lineas.length
+      ? lineas.map(function(l, i){
+          return '<div class="sim-linea' + (marcas[i] ? " " + marcas[i] : "") + '">' +
+            '<span class="ln">' + (i + 1) + '</span><span>' + escaparHtml(l) + '</span></div>';
+        }).join("")
+      : '<div class="sim-linea"><span class="ln"></span><span class="sim-vacia">archivo vacío</span></div>';
+
+    let validas = 0, invalidas = 0, total = 0;
+    lineas.forEach(function(l){
+      const d = l.split(";");
+      const n = d.length >= 3 ? leerMonto(d[2]) : null;
+      if (n === null) { invalidas++; return; }
+      validas++;
+      total += n;
+    });
+    elCount.innerHTML =
+      '<span>' + lineas.length + ' línea(s)</span>' +
+      '<span>' + validas + ' válida(s)</span>' +
+      '<span>' + invalidas + ' inválida(s)</span>' +
+      '<span>Total: ' + total + '</span>';
+  }
+
+  document.getElementById("simRegistrar").addEventListener("click", function(){
+    const v = inVendedor.value.trim();
+    const p = inProducto.value.trim();
+    const raw = inMonto.value.trim();
+    const n = leerMonto(raw);
+    if (!v || !p){
+      marcas = {};
+      log("Faltan el vendedor o el producto: el registro debe tener los tres campos.", "bad");
+      render();
+      return;
+    }
+    if (n === null){
+      marcas = {};
+      log('double.TryParse("' + escaparHtml(raw) + '", out monto) devolvió <strong>false</strong>: el monto no es un número y no se escribió nada. El programa no se cae gracias a <code>TryParse</code>.', "bad");
+      render();
+      return;
+    }
+    lineas.push(v + ";" + p + ";" + raw);
+    marcas = {};
+    marcas[lineas.length - 1] = "hit";
+    log('File.AppendAllText(archivo, "' + escaparHtml(v + ";" + p + ";" + raw) + '\\n"); → se agregó la línea ' + lineas.length + '. Las anteriores siguen ahí.', "ok");
+    render();
+  });
+
+  document.getElementById("simCorrupta").addEventListener("click", function(){
+    lineas.push("Pedro;Cuaderno");
+    marcas = {};
+    marcas[lineas.length - 1] = "bad";
+    log('Se agregó "Pedro;Cuaderno", que tiene 2 campos. Al leerlo, <code>datos[2]</code> no existe y lanza <code>IndexOutOfRangeException</code>: por eso se revisa <code>datos.Length</code> antes de usar el campo.', "bad");
+    render();
+  });
+
+  document.getElementById("simBuscarBtn").addEventListener("click", function(){
+    const buscado = inBuscar.value.trim();
+    if (!buscado){
+      log("Escribe un vendedor para buscar.", "bad");
+      return;
+    }
+    const hits = [];
+    marcas = {};
+    lineas.forEach(function(l, i){
+      const d = l.split(";");
+      if (d.length >= 1 && d[0] === buscado){
+        hits.push(i);
+        marcas[i] = "hit";
+      }
+    });
+    if (hits.length){
+      log('lineas[i].Split(\';\') → <code>datos[0] == "' + escaparHtml(buscado) + '"</code> coincide en ' + hits.length + ' línea(s). La comparación distingue mayúsculas: "ana" no es "Ana".', "ok");
+    } else {
+      log('Ninguna línea empieza con "' + escaparHtml(buscado) + '". Se compara <code>datos[0]</code>, no la línea completa, y las mayúsculas cuentan.', "bad");
+    }
+    render();
+  });
+
+  document.getElementById("simTotal").addEventListener("click", function(){
+    let validas = 0, total = 0;
+    lineas.forEach(function(l){
+      const d = l.split(";");
+      const n = d.length >= 3 ? leerMonto(d[2]) : null;
+      if (n === null) return;
+      validas++;
+      total += n;
+    });
+    marcas = {};
+    log('Se recorrieron ' + lineas.length + ' líneas: ' + validas + ' tenían monto numérico y suman <strong>' + total + '</strong>. Las demás se ignoraron sin romper el programa.', "ok");
+    render();
+  });
+
+  document.getElementById("simWrite").addEventListener("click", function(){
+    const v = inVendedor.value.trim() || "Ana";
+    const p = inProducto.value.trim() || "Cuaderno";
+    const raw = inMonto.value.trim();
+    if (leerMonto(raw) === null){
+      log("El monto no es un número: no se escribió nada, ni siquiera con WriteAllText.", "bad");
+      return;
+    }
+    lineas = [v + ";" + p + ";" + raw];
+    marcas = { 0: "bad" };
+    log('File.WriteAllText reemplazó <strong>todo</strong> el archivo: las ventas anteriores desaparecieron. Por eso para registrar se usa <code>AppendAllText</code>.', "bad");
+    render();
+  });
+
+  document.getElementById("simReset").addEventListener("click", function(){
+    lineas = ["Ana;Cuaderno;4500"];
+    marcas = {};
+    elLog.innerHTML = "";
+    log("Archivo reiniciado con una venta de ejemplo. <code>AppendAllText</code> agrega al final; <code>WriteAllText</code> reemplaza todo.", "");
+    render();
+  });
+
+  log("El archivo empieza con la venta de Ana. Pulsa <strong>Registrar venta</strong> para agregar otra con <code>AppendAllText</code>.", "");
+  render();
+})();
+
+/* ============================================================
+   PARES DE ERRORES DE C#
+   ============================================================ */
+(function(){
+  const contMsg = document.getElementById("paresMsg");
+  if (!contMsg) return;
+  const contCausa = document.getElementById("paresCausa");
+  const estado = document.getElementById("paresEstado");
+
+  const PARES = [
+    { id: "p1", msg: '<code>CS1002</code> Se esperaba <code>;</code>',
+      causa: "Falta el punto y coma al final de una instrucción." },
+    { id: "p2", msg: '<code>CS0161</code> No todos los caminos de código devuelven un valor',
+      causa: "El método declara <code>bool</code> pero hay un camino sin <code>return</code>." },
+    { id: "p3", msg: '<code>CS0029</code> No se puede convertir implícitamente <code>string</code> en <code>double</code>',
+      causa: "Asignas <code>datos[2]</code> (texto) a un <code>double</code> sin <code>double.Parse</code>." },
+    { id: "p4", msg: '<code>CS0246</code> No se encontró el tipo o espacio de nombres <code>File</code>',
+      causa: "Falta <code>using System.IO;</code> al inicio del archivo." },
+    { id: "p5", msg: '<code>CS7036</code> No se ha dado ningún argumento para el parámetro requerido <code>nombre</code>',
+      causa: "Llamas a <code>new Equipo()</code> sin pasar el argumento que pide el constructor." },
+    { id: "p6", msg: '<code>CS0165</code> Uso de la variable local no asignada <code>monto</code>',
+      causa: "Usas <code>monto</code> sin asignarlo; con <code>out monto</code> es el método quien lo asigna." }
+  ];
+
+  let selMsg = null, selCausa = null;
+  let acertadas = new Set();
+  let intentos = 0;
+  let revelado = false;
+
+  function numero(id){
+    return PARES.findIndex(p => p.id === id) + 1;
+  }
+
+  function mezclar(lista){
+    const copia = lista.slice();
+    for (let i = copia.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [copia[i], copia[j]] = [copia[j], copia[i]];
+    }
+    return copia;
+  }
+
+  function tarjeta(p, lado){
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "par-card";
+    b.dataset.id = p.id;
+    b.dataset.lado = lado;
+    b.innerHTML = lado === "msg" ? p.msg : p.causa;
+    b.addEventListener("click", function(){ elegir(b); });
+    return b;
+  }
+
+  function pintar(){
+    contMsg.innerHTML = "";
+    contCausa.innerHTML = "";
+    mezclar(PARES).forEach(p => contMsg.appendChild(tarjeta(p, "msg")));
+    mezclar(PARES).forEach(p => contCausa.appendChild(tarjeta(p, "causa")));
+    selMsg = null;
+    selCausa = null;
+    acertadas = new Set();
+    intentos = 0;
+    revelado = false;
+    estado.style.color = "";
+    estado.textContent = "0 / " + PARES.length + " parejas";
+  }
+
+  function etiquetar(el, id){
+    if (!el.querySelector(".par-tag")) {
+      el.insertAdjacentHTML("afterbegin", '<span class="par-tag">Par ' + numero(id) + '</span>');
+    }
+  }
+
+  function actualizar(){
+    const n = acertadas.size;
+    estado.style.color = n === PARES.length ? "var(--ok)" : "";
+    estado.textContent = n + " / " + PARES.length + " parejas · " + intentos + " intento(s)" +
+      (n === PARES.length ? " · Completado" : "");
+  }
+
+  function elegir(el){
+    if (revelado || el.classList.contains("matched")) return;
+    const lado = el.dataset.lado;
+    const previo = lado === "msg" ? selMsg : selCausa;
+    if (previo === el){
+      el.classList.remove("sel");
+      if (lado === "msg") selMsg = null; else selCausa = null;
+      return;
+    }
+    if (previo) previo.classList.remove("sel");
+    if (lado === "msg") selMsg = el; else selCausa = el;
+    el.classList.add("sel");
+    if (selMsg && selCausa) comprobar();
+  }
+
+  function comprobar(){
+    const a = selMsg, b = selCausa;
+    intentos++;
+    if (a.dataset.id === b.dataset.id){
+      a.classList.remove("sel");
+      b.classList.remove("sel");
+      a.classList.add("matched");
+      b.classList.add("matched");
+      acertadas.add(a.dataset.id);
+      etiquetar(a, a.dataset.id);
+      etiquetar(b, a.dataset.id);
+      selMsg = null;
+      selCausa = null;
+      actualizar();
+    } else {
+      a.classList.add("wrong");
+      b.classList.add("wrong");
+      const m = a, c = b;
+      selMsg = null;
+      selCausa = null;
+      setTimeout(function(){
+        m.classList.remove("wrong", "sel");
+        c.classList.remove("wrong", "sel");
+      }, 700);
+      actualizar();
+    }
+  }
+
+  document.getElementById("paresSol").addEventListener("click", function(){
+    revelado = true;
+    document.querySelectorAll("#errores-cs .par-card").forEach(function(el){
+      if (!el.classList.contains("matched")){
+        el.classList.remove("sel");
+        el.classList.add("matched");
+        etiquetar(el, el.dataset.id);
+      }
+      acertadas.add(el.dataset.id);
+    });
+    selMsg = null;
+    selCausa = null;
+    actualizar();
+    estado.textContent = PARES.length + " / " + PARES.length + " parejas · Solución mostrada";
+  });
+
+  document.getElementById("paresReset").addEventListener("click", pintar);
+
+  pintar();
+})();
+
+/* ============================================================
+   CHULETA
+   ============================================================ */
+document.getElementById("chuletaImprimir").addEventListener("click", function(){
+  window.print();
+});
 
 /* ============================================================
    NAV / PROGRESO / INICIO
